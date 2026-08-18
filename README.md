@@ -1,17 +1,13 @@
-﻿# Nugget Doom
+﻿# Calamity Doom: R
 
-[![Nugget Doom Icon](https://raw.githubusercontent.com/MrAlaux/Nugget-Doom/master/data/nugget-doom.png)](https://github.com/MrAlaux/Nugget-Doom)
+//[![Nugget Doom Icon](https://raw.githubusercontent.com/MrAlaux/Nugget-Doom/master/data/nugget-doom.png)](https://github.com/MrAlaux/Nugget-Doom)
 
 [![Release](https://img.shields.io/github/release/MrAlaux/Nugget-Doom.svg)](https://github.com/MrAlaux/Nugget-Doom/releases/latest)
 [![Release Date](https://img.shields.io/github/release-date/MrAlaux/Nugget-Doom.svg)](https://github.com/MrAlaux/Nugget-Doom/releases/latest)
 [![Downloads (total)](https://img.shields.io/github/downloads/MrAlaux/Nugget-Doom/total)](https://github.com/MrAlaux/Nugget-Doom/releases)
 [![Downloads (latest)](https://img.shields.io/github/downloads/MrAlaux/Nugget-Doom/latest/total.svg)](https://github.com/MrAlaux/Nugget-Doom/releases/latest)
 
-Nugget Doom is a source port of Doom forked from [Woof!](https://github.com/fabiangreffrath/woof), simply intended to implement additional features.
-
-**Note:** this README and the rest of documentation are updated on a per-commit basis,
-meaning that they may not correspond to the latest release of Nugget Doom.
-If you're seeking information on the version you're using, please refer to the documentation included with it.
+Calamity Doom: R is a fork of [Nugget Doom](https://github.com/MrAlaux/Nugget-Doom) intended to add even more features.
 
 The build corresponding to this documentation is based on [Woof! 15.3.0](https://github.com/fabiangreffrath/woof/releases/tag/woof_15.3.0).
 
@@ -22,48 +18,7 @@ Although the new code has been written with the intention of not breaking demo c
 
 ## Main Features
 
-- **True-color Lighting**
-- **Rewinding**
-- **Customizable skill level**
-- **_Extra Gibbing_** setting, to force gibbing under certain conditions
-- **_Bloodier Gibbing_** setting
-- **Support for high-resolution sprites between `HI_START`/`HI_END` markers**
-- **_Smart Autoaim_** setting
-- **_Move Over/Under Things_** setting
-- **_Hitbox-based Hitscan Collision_** setting
-- **Minimap:** Quickly press the automap button twice to toggle it
-- **_Tag Finder_** from PrBoomX
-- **_Sprite Shadows_** setting
-- **_Radial Fog_** setting
-- **_Thing Lighting Mode_** setting
-- **Slow Motion** button
-- Button to **_Teleport to automap pointer_**
-- **_Freecam_**
-- **_Flip Levels_** setting
-- **_Milestone-Completion Announcements_** setting
-- **_Bobbing Style_** setting
-- **_Night-Vision Visor Effect_** setting
-- **_Auto Save Interval_** setting, for periodic auto saves
-- **_Damage Tint Cap_** and **_Bonus Tint Cap_**, to attenuate or disable said screen tinting
-- **Jumping and Crouching**
-- **_Message Lines_** settings, allowing a **message list**
-- **NUGHUD**, an alternative lump for HUD customization (see `docs/nughud.md`)
-- Most of **Crispy Doom's accessibility settings**
-- **Support for weapon voxel models**
-- **Support for SSG in Doom 1**
-- **New cheats**, such as:
-  - `FULLCLIP` for infinite ammo
-  - `VALIANT` for fast weapons
-  - `GIBBERS` to force gibbing on dying enemies
-  - `RIOTMODE` cheat, to make enemies attack all sentient entities
-  - `SUMMON` to spawn an actor based on its type index
-  - `IDDF` to find a key in the automap
-  - `MDK` to perform a hitscan attack of 1-million damage
-  - `SAITAMA` to enable the MDK Fist
-  - `BOOMCAN` for explosive hitscan attacks
-  - `TURBO` to change the player speed in-game
-
-See `FEATURES.md` for more information.
+Calamity Doom: R builds on top of Nugget Doom with numerous enhancements, most being cosmetic and quality-of-life additions, such as:
 
 # Releases
 
@@ -73,19 +28,6 @@ for the latest release can be found on the [Release](https://github.com/MrAlaux/
 The most recent list of changes can be found in the [Changelog](https://github.com/MrAlaux/Nugget-Doom/blob/master/CHANGELOG.md).
 
 A complete history of changes and releases can be found on the [Releases](https://github.com/MrAlaux/Nugget-Doom/releases) page.
-
-## Versioning
-
-Nugget Doom follows a fairly simple (albeit arbitrary) **X.Y.Z** versioning system:
-
-- **X** is increased in the event of major implementations, as were arbitrary/dynamic resolution and voxel support;
-- **Y** is increased in the event of minor implementations, such as a new cheat;
-- **Z** is increased in the event of bug fixes or text/code reformatting.
-
-Incrementing any of the first values will reset the latter (i.e. a major change to 1.1.2 would shift it to 2.0.0).
-
-The merging of changes from Woof! releases may affect any of the version values,
-but not necessarily in the same way as Woof!'s own version (i.e. `Woof! 11.Y.Z -> 12.Y.Z` doesn't necessarily mean `Nugget 2.Y.Z -> 3.Y.Z`).
 
 # Compiling
 
@@ -181,6 +123,7 @@ Copyright:
  © 2023 liPillON;  
  © 2024 pvictress;  
  © 2025 Guilherme Miranda.  
+ © 2026 Vladislav "Ear1h" Putintsev
 License: [GPL-2.0+](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 
 Files: `src/i_flickstick.*, src/i_gyro.*`  
