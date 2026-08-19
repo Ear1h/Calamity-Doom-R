@@ -216,6 +216,7 @@ extern  boolean         slowbrain;
 extern  boolean         fastmonsters;
 extern  boolean         aggressive;
 extern  boolean         x2monsters;
+extern  int             tysontype;
 
 // [Nugget] -----------------------------------------------------------------/
 

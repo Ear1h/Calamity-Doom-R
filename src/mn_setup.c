@@ -389,6 +389,7 @@ enum
     str_s_clipping_dist,
     str_page_ticking,
     str_thing_spawns,
+    str_tysontype,
 };
 
 static const char **GetStrings(int id);
@@ -4388,6 +4389,10 @@ static const char *thing_spawns_strings[] = {
   "Easy", "Normal", "Hard"
 };
 
+static const char *tyson_type[] = {
+    "Off", "Classic", "Arcade"
+};
+
 static void StartCustomSkill(const int mode)
 {
   SetItemOn(set_item_on);
@@ -4432,7 +4437,7 @@ static setup_menu_t customskill_settings1[] = {
     {"Fast Monsters",                   S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_fast"}},
     {"Respawning Monsters",             S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_respawn"}},
     {"Aggressive (Nightmare) Monsters", S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_aggressive"}},
-    MI_GAP,
+    {"Tyson Type",       S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_tysontype"}, .strings_id = str_tysontype},
     {"Start New Game",                   S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSNewGame},
     {"Restart Level -- Pistol Start",    S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSPistolStart},
     {"Restart Level -- Initial Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSInitialLoadout},
@@ -5970,6 +5975,7 @@ static const char **selectstrings[] = {
     s_clipping_dist_strings,
     page_ticking_strings,
     thing_spawns_strings,
+    tyson_type,
 };
 
 static const char **GetStrings(int id)

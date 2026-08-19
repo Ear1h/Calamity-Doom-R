@@ -463,6 +463,54 @@ void P_LoadThings (int lump)
       mt->type = SHORT(mt->type);
       mt->options = SHORT(mt->options);
 
+      
+      // Non arcade tyson. All dropped items has been removed
+      // All weapons deleted (exclude chainsaw)
+      if (tysontype) // Any
+      {
+          switch (mt->type)
+          {
+              case 2006: //BFG9000
+              case 2002: //Chaingun
+              case 2004: //Plasma
+              case 2003: //Rocket
+              case 2001: //Shotgun
+              case 82: // Supershotgun
+                  continue;
+              // Switch ammo to clip/clipboxes
+              case 2047:
+              case 2010:
+              case 2008:
+                  mt->type = 2007;
+              case 2046:
+              case 2049:
+              case 17:
+                  mt->type = 2048;
+
+          }
+          
+          for (int i = 0; i < num_mobj_types; i++)
+              mobjinfo[i].droppeditem = MT_NULL;
+
+          if (tysontype == 2) // Give drop any health
+          {
+              for (int i = 0; i < num_mobj_types; i++)
+              {
+                  if (mobjinfo[i].spawnhealth <= 40)
+                       mobjinfo[i].droppeditem = MT_MISC2;
+                  else if (mobjinfo[i].spawnhealth <= 200)
+                      mobjinfo[i].droppeditem = MT_MISC10;
+                  else if (mobjinfo[i].spawnhealth <= 1000)
+                      mobjinfo[i].droppeditem = MT_MISC11;
+                  else if (mobjinfo[i].spawnhealth <= 3000)
+                      mobjinfo[i].droppeditem = MT_MISC12;
+                  else
+                      mobjinfo[i].droppeditem = MT_MEGA;
+              }
+             
+          }
+      }
+
       P_SpawnMapThing (mt);
 
       // [Nugget] ------------------------------------------------------------

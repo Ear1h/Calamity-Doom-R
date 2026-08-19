@@ -353,6 +353,21 @@ static struct {
   boolean x2monsters;
 } customskill;
 
+// [Calamity. New Skills]
+// 0 - Off
+// 1 - Classic
+// 2 - Arcade (Every enemy drops any health)
+int custom_skill_tysontype;
+
+static struct
+{
+    int tysontype;
+} customskill2;
+
+
+int tysontype;
+
+
 int     thingspawns;
 boolean realnomonsters;
 boolean doubleammo;
@@ -361,6 +376,7 @@ boolean slowbrain;
 boolean fastmonsters;
 boolean aggressive;
 boolean x2monsters;
+
 
 static struct {
   int          mohealth;
@@ -390,6 +406,7 @@ void G_SetSkillParms(const skill_t skill)
     respawnmonsters = customskill.respawn;
     aggressive      = customskill.aggressive;
     x2monsters      = customskill.x2monsters;
+    tysontype       = customskill2.tysontype;
   }
   else {
     thingspawns = (skill == sk_baby || skill == sk_easy)      ? THINGSPAWNS_EASY :
@@ -405,6 +422,7 @@ void G_SetSkillParms(const skill_t skill)
     aggressive      = skill == sk_nightmare;
 
     x2monsters = false;
+    tysontype = 0;
   }
 
   G_SetFastParms(fastmonsters);
@@ -422,6 +440,7 @@ void G_SetUserCustomSkill(void)
   customskill.respawn    = custom_skill_respawn;
   customskill.aggressive = custom_skill_aggressive;
   customskill.x2monsters = custom_skill_x2monsters;
+  customskill2.tysontype = custom_skill_tysontype;
 }
 
 static void G_UpdateInitialLoadout(void)
@@ -1422,6 +1441,11 @@ static void G_DoLoadLevel(void)
     {
       if (playeringame[i] && players[i].playerstate == PST_DEAD)
         players[i].playerstate = PST_REBORN;
+
+      if (tysontype)
+      {
+          players[i].powers[pw_strength] = true;
+      }
       memset (players[i].frags,0,sizeof(players[i].frags));
     }
 
@@ -2791,7 +2815,7 @@ static void G_DoPlayDemo(void)
 // killough 2/22/98: version id string format for savegames
 #define VERSIONID "MBF %d"
 
-#define CURRENT_SAVE_VERSION "Nugget 4.6.0" // [Nugget]
+#define CURRENT_SAVE_VERSION "Calamity 1.0" // [Calamity]
 
 static char *savename = NULL;
 
@@ -3138,6 +3162,7 @@ static void DoSaveGame(char *name)
   saveg_write32(customskill.respawn);
   saveg_write32(customskill.aggressive);
   saveg_write32(customskill.x2monsters);
+  saveg_write32(customskill2.tysontype);
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -3255,6 +3280,7 @@ static boolean DoLoadGame(boolean do_load_autosave)
   CheckSaveVersion("Nugget 3.3.0", saveg_nugget330);
   CheckSaveVersion("Nugget 4.0.0", saveg_nugget400);
   CheckSaveVersion("Nugget 4.5.0", saveg_nugget450);
+  CheckSaveVersion("Nugget 4.6.0", saveg_nugget460);
   CheckSaveVersion(CURRENT_SAVE_VERSION, saveg_current);
 
   // killough 2/22/98: Friendly savegame version difference message
@@ -3435,6 +3461,8 @@ static boolean DoLoadGame(boolean do_load_autosave)
 
     if (saveg_compat > saveg_nugget320)
     { READ(customskill.x2monsters); }
+    if (saveg_compat > saveg_nugget460)
+    { READ(customskill2.tysontype);}
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
 
@@ -3674,6 +3702,7 @@ static void G_SaveKeyFrame(void)
   saveg_write32(customskill.respawn);
   saveg_write32(customskill.aggressive);
   saveg_write32(customskill.x2monsters);
+  saveg_write32(customskill2.tysontype);
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -3930,6 +3959,7 @@ static void G_DoRewind(void)
     customskill.respawn    = saveg_read32();
     customskill.aggressive = saveg_read32();
     customskill.x2monsters = saveg_read32();
+    customskill2.tysontype = saveg_read32();
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
 
@@ -4498,6 +4528,14 @@ void G_PlayerReborn(int player)
   p->weaponowned[wp_fist] = true;
   p->weaponowned[wp_pistol] = true;
   p->ammo[am_clip] = initial_bullets; // Ty 03/12/98 - use dehacked values
+
+  if (tysontype)
+  {
+      p->powers[pw_strength] = true;
+      p->nextweapon = p->readyweapon = p->pendingweapon = wp_fist;
+  }
+     
+
 
   for (i=0 ; i<NUMAMMO ; i++)
     p->maxammo[i] = maxammo[i];
@@ -6233,6 +6271,10 @@ void G_BindGameVariables(void)
   M_BindBool("custom_skill_x2monsters", &custom_skill_x2monsters, NULL,
             0, ss_skill, wad_yes,
             "Custom Skill: duplicate monster spawns");
+
+  M_BindNum("custom_skill_tysontype", &custom_skill_tysontype, NULL,
+             0, 0, 2, ss_skill, wad_yes, 
+            "Custom Skill: Tyson type (0 = Off; 1 = Classic; 2 = Arcade)");
 
   // [Nugget] ---------------------------------------------------------------/
 
