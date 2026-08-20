@@ -505,7 +505,18 @@ void P_LoadThings (int lump)
                   else if (mobjinfo[i].spawnhealth <= 3000)
                       mobjinfo[i].droppeditem = MT_MISC12;
                   else
-                      mobjinfo[i].droppeditem = MT_MEGA;
+                  {
+                      if (gamemode != commercial)
+                      {
+                          mobjinfo[i].droppeditem = MT_MISC12;
+                      }
+
+                      else
+                      {
+                          mobjinfo[i].droppeditem = MT_MEGA;
+                      }
+                  }
+                     
               }
              
           }
