@@ -84,6 +84,7 @@ set(BASE_SOURCES
     all-all/dsdgdth.wav
     all-all/dsdgpain.wav
     all-all/dsdgsit.wav
+    all-all/dsdquact.wav
     all-all/m_butt1.png
     all-all/m_butt2.png
     all-all/m_vbox.png

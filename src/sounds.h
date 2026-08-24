@@ -358,6 +358,9 @@ typedef enum {
   sfx_ngslon,
   sfx_ngslof,
 
+  // Calamity
+  sfx_dquact,
+
   NUG_SFX_END,
 
   // [Nugget] ---------------------------------------------------------------/

@@ -289,6 +289,8 @@ sfxinfo_t original_S_sfx[NUMSFX] = {
   SOUND("ngslon", sg_none, 60),
   SOUND("ngslof", sg_none, 60),
 
+  SOUND("dquact", sg_none, 66),
+
   // [Nugget] ---------------------------------------------------------------/
 
   [500] = SOUND("fre000", sg_none, 127),
