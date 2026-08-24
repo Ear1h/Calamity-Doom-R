@@ -217,6 +217,11 @@ extern  boolean         fastmonsters;
 extern  boolean         aggressive;
 extern  boolean         x2monsters;
 extern  int             tysontype;
+extern  int             shadowtype;
+extern  boolean         nosaves;
+extern  boolean         nocheats;
+extern  int             duplicatecount;
+extern  boolean         quadguy;
 
 // [Nugget] -----------------------------------------------------------------/
 

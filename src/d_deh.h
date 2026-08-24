@@ -79,6 +79,8 @@ extern char *s_QLOADNET; // = QLOADNET;
 extern char *s_QSAVESPOT; // = QSAVESPOT;
 //#define SAVEDEAD      "you can't save if you aren't playing!\n\n"PRESSKEY
 extern char *s_SAVEDEAD; // = SAVEDEAD;
+
+extern char *s_SAVELOCK; // = SAVELOCK;
 //#define QSPROMPT      "quicksave over your game named\n\n'%s'?\n\n"PRESSYN
 extern char *s_QSPROMPT; // = QSPROMPT;
 //#define QLPROMPT      "do you want to quickload the game named\n\n'%s'?\n\n"PRESSYN

@@ -1135,6 +1135,13 @@ static void saveg_read_player_t(player_t *str)
         return;
     }
 
+    // [Calamity]]
+
+    if (saveg_compat > saveg_nugget460)
+    {
+        str->damagefactor = saveg_read32();
+    }
+
     str->nextweapon = str->readyweapon;
 }
 
@@ -1305,6 +1312,7 @@ static void saveg_write_player_t(player_t *str)
     saveg_write32(str->jumptics); // int jumptics;
     saveg_write32(str->crouchoffset); // fixed_t crouchoffset;
     saveg_write_enum(str->lastweapon); // weapontype_t lastweapon;
+    saveg_write32(str->damagefactor);
 }
 
 

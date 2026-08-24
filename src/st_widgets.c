@@ -1494,7 +1494,8 @@ static void UpdatePowers(sbe_widget_t *widget, player_t *player)
           } \
         }
 
-    POWERUP_TIMER(pw_invisibility,    INVISTICS,  3, "INVIS", CR_RED);
+    if (gameskill != sk_custom && !shadowtype)
+        POWERUP_TIMER(pw_invisibility,    INVISTICS,  3, "INVIS", CR_RED);
     POWERUP_TIMER(pw_invulnerability, INVULNTICS, 4, "INVUL", CR_GREEN);
     POWERUP_TIMER(pw_infrared,        INFRATICS,  5, "LIGHT", CR_BRICK);
     POWERUP_TIMER(pw_ironfeet,        IRONTICS,   6, "SUIT",  CR_GRAY);

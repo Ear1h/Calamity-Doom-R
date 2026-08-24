@@ -997,14 +997,31 @@ void P_PlayerThink (player_t* player)
   if (player->powers[pw_strength])
     player->powers[pw_strength]++;
 
+  if (player->powers[pw_quad] && (gameskill == sk_custom && quadguy)) // Infinite Quad Damage;
+      player->damagefactor = 4;
+
+   if (player->powers[pw_quad] > 0 && gameskill != sk_custom) // killough
+  {
+      if (!--player->powers[pw_quad])
+      {
+          player->damagefactor = 1;
+      }
+  }
+
   // killough 1/98: Make idbeholdx toggle:
 
   if (player->powers[pw_invulnerability] > 0) // killough
     player->powers[pw_invulnerability]--;
 
-  if (player->powers[pw_invisibility] > 0)    // killough
+  if (player->powers[pw_invisibility] > 0 && gameskill != sk_custom)    // killough
     if (! --player->powers[pw_invisibility] )
       player->mo->flags &= ~MF_SHADOW;
+
+  if (player->powers[pw_invisibility] && gameskill == sk_custom
+      && (shadowtype == 1 || shadowtype == 3))
+  {
+      player->mo->flags |= MF_SHADOW;
+  }
 
   if (player->powers[pw_infrared] > 0)        // killough
     player->powers[pw_infrared]--;

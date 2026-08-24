@@ -232,6 +232,10 @@ typedef struct player_s
 
   int                 eventtype;
 
+  // [Calamity] -------------------------------------------------------------
+
+  int       damagefactor; // Special for Quad Damage
+
 } player_t;
 
 

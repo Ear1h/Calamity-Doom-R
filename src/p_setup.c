@@ -463,9 +463,28 @@ void P_LoadThings (int lump)
       mt->type = SHORT(mt->type);
       mt->options = SHORT(mt->options);
 
-      
+      const boolean shadowflag = (shadowtype == 2 || shadowtype == 3);
+
+      for (int i = 0; i < num_mobj_types; i++)
+      {
+
+          if (mobjinfo[i].flags & MF_COUNTKILL || i == MT_SKULL)
+          {
+              if (shadowflag)
+              {
+                  mobjinfo[i].flags |= MF_SHADOW;
+              }
+              else
+              {
+                  if (i != MT_SHADOWS)
+                  {
+                      mobjinfo[i].flags &= ~MF_SHADOW;
+                  }
+              }
+          }
+      }
+
       // Non arcade tyson. All dropped items has been removed
-      // All weapons deleted (exclude chainsaw)
       if (tysontype) // Any
       {
           switch (mt->type)
@@ -476,49 +495,19 @@ void P_LoadThings (int lump)
               case 2003: //Rocket
               case 2001: //Shotgun
               case 82: // Supershotgun
-                  continue;
+                  mt->type = 2023; // Change to berserkpack
+                  break;
               // Switch ammo to clip/clipboxes
               case 2047:
               case 2010:
               case 2008:
                   mt->type = 2007;
+                  break;
               case 2046:
               case 2049:
               case 17:
                   mt->type = 2048;
-
-          }
-          
-          for (int i = 0; i < num_mobj_types; i++)
-              mobjinfo[i].droppeditem = MT_NULL;
-
-          if (tysontype == 2) // Give drop any health
-          {
-              for (int i = 0; i < num_mobj_types; i++)
-              {
-                  if (mobjinfo[i].spawnhealth <= 40)
-                       mobjinfo[i].droppeditem = MT_MISC2;
-                  else if (mobjinfo[i].spawnhealth <= 200)
-                      mobjinfo[i].droppeditem = MT_MISC10;
-                  else if (mobjinfo[i].spawnhealth <= 1000)
-                      mobjinfo[i].droppeditem = MT_MISC11;
-                  else if (mobjinfo[i].spawnhealth <= 3000)
-                      mobjinfo[i].droppeditem = MT_MISC12;
-                  else
-                  {
-                      if (gamemode != commercial)
-                      {
-                          mobjinfo[i].droppeditem = MT_MISC12;
-                      }
-
-                      else
-                      {
-                          mobjinfo[i].droppeditem = MT_MEGA;
-                      }
-                  }
-                     
-              }
-             
+                  break;
           }
       }
 
@@ -526,15 +515,20 @@ void P_LoadThings (int lump)
 
       // [Nugget] ------------------------------------------------------------
 
-      if (x2monsters)
+      if (x2monsters || duplicatecount)
       {
         const mobjtype_t mobjtype = P_FindDoomedNum(mt->type);
-
         if (mobjtype < num_mobj_types
             && ((mobjinfo[mobjtype].flags & MF_COUNTKILL) || mobjtype == MT_SKULL))
         {
-          array_push(enemies, i);
-          numenemies++;
+              array_push(enemies, i);  // x2
+              numenemies++;
+              
+              for (int j = 0; j < ((1 << duplicatecount) - 1); j++)
+              {
+                  array_push(enemies, i);
+                  numenemies++;
+              }
         }
       }
     }
@@ -543,7 +537,7 @@ void P_LoadThings (int lump)
 
   // Custom Skill: duplicate monster spawns ----------------------------------
 
-  if (x2monsters)
+  if (x2monsters || duplicatecount)
   {
     P_ToggleDuplicateSpawns(true);
 

@@ -177,6 +177,7 @@ typedef enum {
   pw_allmap,
   pw_infrared,
   NUMPOWERS,
+  pw_quad,   // Quad Damage!
 } powertype_t;
 
 typedef enum

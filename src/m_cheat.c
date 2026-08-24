@@ -1355,12 +1355,18 @@ static void cheat_pw(int pw)
   }
   else
   if (plyr->powers[pw])
-    plyr->powers[pw] = pw!=pw_strength && pw!=pw_allmap;  // killough
+    plyr->powers[pw] = pw!=pw_strength && pw!=pw_allmap && pw != pw_invisibility;  // killough
   else
     {
       P_GivePower(plyr, pw);
       if (pw != pw_strength && !comp[comp_infcheat])
         plyr->powers[pw] = -1;      // infinite duration -- killough
+
+      if (pw == pw_invisibility)
+      {
+          plyr->powers[pw_invisibility] = -1;
+          plyr->mo->flags |= MF_SHADOW;
+      }
     }
   displaymsg("%s", s_STSTR_BEHOLDX); // Ty 03/27/98 - externalized
 }
@@ -1990,7 +1996,8 @@ static boolean CheatAllowed(cheat_when_t when)
            && !(when & not_demo && (demorecording || demoplayback))
            && !(when & not_menu && menuactive)
            && !(when & beta_only && !beta_emulation)
-           && !(when & devmode_only && !nugget_devmode); // [Nugget]
+           && !(when & devmode_only && !nugget_devmode) // [Nugget]
+           &&!(when & sk_custom && nocheats);         // [Nugget]
 }
 
 // The cheat detection function was replaced with a version from Chocolate Doom

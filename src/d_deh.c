@@ -191,6 +191,7 @@ char *s_LOADNET = LOADNET;     // PRESSKEY; // killough 4/4/98:
 char *s_QLOADNET = QLOADNET;   // PRESSKEY;
 char *s_QSAVESPOT = QSAVESPOT; // PRESSKEY;
 char *s_SAVEDEAD = SAVEDEAD;   // PRESSKEY; // remove duplicate y/n
+char *s_SAVELOCK = SAVELOCK;   // PRESSKEY; // remove duplicate y/n
 char *s_QSPROMPT = QSPROMPT;   // PRESSYN;
 char *s_QLPROMPT = QLPROMPT;   // PRESSYN;
 char *s_NEWGAME = NEWGAME;     // PRESSKEY;
@@ -593,6 +594,7 @@ static deh_strs deh_strlookup[] = {
     {&s_QLOADNET,           "QLOADNET"          },
     {&s_QSAVESPOT,          "QSAVESPOT"         },
     {&s_SAVEDEAD,           "SAVEDEAD"          },
+    {&s_SAVELOCK,           "SAVELOCK"          },
     {&s_QSPROMPT,           "QSPROMPT"          },
     {&s_QLPROMPT,           "QLPROMPT"          },
     {&s_NEWGAME,            "NEWGAME"           },

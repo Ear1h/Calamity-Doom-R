@@ -772,6 +772,11 @@ static void P_FireWeapon(player_t *player)
   {
   P_NoiseAlert(player->mo, player->mo);
   }
+
+  if (player->powers[pw_quad])
+  {
+      S_StartSoundEx(NULL, sfx_dquact);
+  }
   lastshottic = gametic;                       // killough 3/22/98
 }
 

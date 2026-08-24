@@ -1566,6 +1566,12 @@ static void M_SaveGame(int choice)
         return;
     }
 
+    if (sk_custom && nosaves)
+    {
+        M_StartMessage(s_SAVELOCK, NULL, false); // Ty 03/27/98 - externalized
+        return;
+    }
+
     if (gamestate != GS_LEVEL)
     {
         return;
@@ -1811,6 +1817,12 @@ static void M_QuickSave(void)
     if (!usergame && (!demoplayback || netgame)) // killough 10/98
     {
         M_StartSoundOptional(sfx_mnuerr, sfx_oof); // [Nugget]: [NS] Optional menu sounds.
+        return;
+    }
+
+    if (sk_custom && nosaves)
+    {
+        M_StartMessage(s_SAVELOCK, NULL, false); // Ty 03/27/98 - externalized
         return;
     }
 

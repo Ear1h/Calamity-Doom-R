@@ -390,6 +390,8 @@ enum
     str_page_ticking,
     str_thing_spawns,
     str_tysontype,
+    str_shadowtype,
+    str_duplicatecount,
 };
 
 static const char **GetStrings(int id);
@@ -4393,6 +4395,14 @@ static const char *tyson_type[] = {
     "Off", "Classic", "Arcade"
 };
 
+static const char *shadow_type[] = {
+    "Off", "Player", "Monsters", "Both"
+};
+
+static const char *duplicate_count[] = {
+    "x1", "x2", "x4", "x8"
+};
+
 static void StartCustomSkill(const int mode)
 {
   SetItemOn(set_item_on);
@@ -4423,6 +4433,8 @@ static void CSCurrentLoadout(void)
   StartCustomSkill(3);
 }
 
+static setup_tab_t skill_tabs[] = { {"Nugget"}, {"Calamity"}, {NULL} };
+
 static setup_menu_t customskill_settings1[] = {
 
     {"Thing Spawns",       S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_things"}, .strings_id = str_thing_spawns},
@@ -4437,7 +4449,7 @@ static setup_menu_t customskill_settings1[] = {
     {"Fast Monsters",                   S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_fast"}},
     {"Respawning Monsters",             S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_respawn"}},
     {"Aggressive (Nightmare) Monsters", S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_aggressive"}},
-    {"Tyson Type",       S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_tysontype"}, .strings_id = str_tysontype},
+    MI_GAP,
     {"Start New Game",                   S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSNewGame},
     {"Restart Level -- Pistol Start",    S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSPistolStart},
     {"Restart Level -- Initial Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSInitialLoadout},
@@ -4446,7 +4458,25 @@ static setup_menu_t customskill_settings1[] = {
     MI_END
 };
 
-static setup_menu_t *customskill_settings[] = {customskill_settings1, NULL};
+static setup_menu_t customskill_settings2[] = {
+    {"Tyson Type",                       S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_tysontype"}, .strings_id = str_tysontype},
+    {"Infinite Invisibility",            S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_shadowtype"}, .strings_id = str_shadowtype},
+    {"Infinite Quad Damage",             S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_quadguy"}},
+    MI_GAP_Y(4),
+    {"No Saves",                         S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_nosaves"}},
+    {"No Cheats",                        S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_nocheats"}},
+    MI_GAP_Y(4),
+    {"Duplicate Monsters Extended",      S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_duplicatecount"}, .strings_id = str_duplicatecount},
+    MI_GAP,
+    {"Start New Game",                   S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSNewGame},
+    {"Restart Level -- Pistol Start",    S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSPistolStart},
+    {"Restart Level -- Initial Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSInitialLoadout},
+    {"Restart Level -- Current Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSCurrentLoadout},
+
+    MI_END
+};
+
+static setup_menu_t *customskill_settings[] = {customskill_settings1, customskill_settings2, NULL};
 
 void MN_CustomSkill(void)
 {
@@ -4454,7 +4484,7 @@ void MN_CustomSkill(void)
     setup_screen = ss_skill;
     current_page = GetPageIndex(customskill_settings);
     current_menu = customskill_settings[current_page];
-    current_tabs = NULL;
+    current_tabs = skill_tabs;
     SetupMenu();
 }
 
@@ -4462,6 +4492,7 @@ void MN_DrawCustomSkill(void)
 {
     DrawBackground("FLOOR4_6"); // Draw background
     MN_DrawTitle(M_X_CENTER, M_Y_TITLE, "M_CSTSKL", "Custom Skill");
+    DrawTabs();
     DrawInstructions();
     DrawScreenItems(current_menu);
 }
@@ -5976,6 +6007,8 @@ static const char **selectstrings[] = {
     page_ticking_strings,
     thing_spawns_strings,
     tyson_type,
+    shadow_type,
+    duplicate_count,
 };
 
 static const char **GetStrings(int id)

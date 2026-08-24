@@ -968,6 +968,8 @@ static void P_KillMobj(mobj_t *source, mobj_t *target, method_t mod,
 
   target->flags &= ~(MF_SHOOTABLE|MF_FLOAT|MF_SKULLFLY);
 
+  int spawnhealth = target->info->spawnhealth;
+
   if (target->type != MT_SKULL)
     target->flags &= ~MF_NOGRAVITY;
 
@@ -1101,11 +1103,60 @@ static void P_KillMobj(mobj_t *source, mobj_t *target, method_t mod,
   // This determines the kind of object spawned
   // during the death frame of a thing.
 
-  if (target->info->droppeditem != MT_NULL)
+  if (!tysontype)
   {
-    item = target->info->droppeditem;
+      if (target->info->droppeditem != MT_NULL)
+      {
+        item = target->info->droppeditem;
+      }
+      else return;
   }
-  else return;
+
+  // Calamity ------------------------------------------
+
+  if (gameskill == sk_custom && tysontype)
+  {
+      if (tysontype != 2)
+      {
+          return;
+      }
+
+      else 
+      if (spawnhealth <= 40)
+      {
+          item = MT_MISC2;
+      }
+      else if (spawnhealth <= 200)
+      {
+          item = MT_MISC10;
+      }
+      else if (spawnhealth <= 1000)
+      {
+          item = MT_MISC11;
+      }
+      else if (spawnhealth <= 3000)
+      {
+          item = MT_MISC12;
+      }
+
+      else
+      {
+          item = (gamemode != commercial) ? MT_MISC12 : MT_MEGA;
+      }
+
+      switch (target->info->droppeditem) // Exclude keys from delete
+      {
+          case MT_MISC4:
+          case MT_MISC5:
+          case MT_MISC6:
+          case MT_MISC7:
+          case MT_MISC8:
+          case MT_MISC9:
+              item = target->info->droppeditem;
+              break;
+      }
+  }
+  // ---------------------------------------------------
 
   mo = P_SpawnMobj (target->x,target->y,ONFLOORZ, item);
   mo->flags |= MF_DROPPED;    // special versions of items
@@ -1159,6 +1210,17 @@ void P_DamageMobjBy(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage
 
   if (target->flags & MF_SKULLFLY)
     target->momx = target->momy = target->momz = 0;
+
+  if (gameskill == sk_custom && inflictor && inflictor->player) // Damage from players projectile 
+  {
+      damage *= inflictor->player->damagefactor;
+  }
+
+  else if (gameskill == sk_custom && source && source->player) // Damage from players hitscan
+       
+  {
+      damage *= source->player->damagefactor;
+  }
 
   player = target->player;
   if (player && halfdamage) // [Nugget]

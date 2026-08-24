@@ -359,13 +359,43 @@ static struct {
 // 2 - Arcade (Every enemy drops any health)
 int custom_skill_tysontype;
 
+// Infinite Invisibility
+// 0 - off
+// 1 - Player only
+// 2 - Monsters
+// 3 - Both
+int custom_skill_shadowtype;
+
+boolean custom_skill_nosaves;
+boolean custom_skill_nocheats;
+
+// x1 - standart
+// x2 - like a Nugget's thing multiple 
+// x4 - quad
+// x8 - fuck...
+
+int custom_skill_duplicatecount;
+
+// Infinite QuadDamage
+boolean custom_skill_quadguy;
+
 static struct
 {
     int tysontype;
+    int shadowtype;
+    boolean nosaves;
+    boolean nocheats;
+    int duplicatecount;
+    boolean quadguy;
 } customskill2;
 
 
 int tysontype;
+int shadowtype;
+boolean nosaves;
+boolean nocheats;
+int duplicatecount;
+boolean quadguy;
 
 
 int     thingspawns;
@@ -407,6 +437,11 @@ void G_SetSkillParms(const skill_t skill)
     aggressive      = customskill.aggressive;
     x2monsters      = customskill.x2monsters;
     tysontype       = customskill2.tysontype;
+    shadowtype      = customskill2.shadowtype;
+    nosaves         = customskill2.nosaves;
+    nocheats        = customskill2.nocheats;
+    duplicatecount  = customskill2.duplicatecount;
+    quadguy         = customskill2.quadguy;
   }
   else {
     thingspawns = (skill == sk_baby || skill == sk_easy)      ? THINGSPAWNS_EASY :
@@ -423,6 +458,11 @@ void G_SetSkillParms(const skill_t skill)
 
     x2monsters = false;
     tysontype = 0;
+    shadowtype = 0;
+    nosaves = false;
+    nocheats = false;
+    duplicatecount = 0;
+    quadguy = false;
   }
 
   G_SetFastParms(fastmonsters);
@@ -441,6 +481,11 @@ void G_SetUserCustomSkill(void)
   customskill.aggressive = custom_skill_aggressive;
   customskill.x2monsters = custom_skill_x2monsters;
   customskill2.tysontype = custom_skill_tysontype;
+  customskill2.shadowtype = custom_skill_shadowtype;
+  customskill2.nosaves  = custom_skill_nosaves;
+  customskill2.nocheats = custom_skill_nocheats;
+  customskill2.duplicatecount = custom_skill_duplicatecount;
+  customskill2.quadguy = custom_skill_quadguy;
 }
 
 static void G_UpdateInitialLoadout(void)
@@ -1446,6 +1491,16 @@ static void G_DoLoadLevel(void)
       {
           players[i].powers[pw_strength] = true;
       }
+
+      if (shadowtype == 1 || shadowtype == 3)
+      {
+          players[i].powers[pw_invisibility] = -1;
+      }
+
+      if (quadguy)
+      {
+          players[i].powers[pw_quad] = -1;
+      }
       memset (players[i].frags,0,sizeof(players[i].frags));
     }
 
@@ -2135,6 +2190,10 @@ static void G_PlayerFinishLevel(int player)
   // [Nugget] Reset more additional player properties ------------------------
 
   p->jumptics = 0; // Jumping
+  
+  // [Calamity] Reset more additional player properties ----------------------
+
+  p->damagefactor = 1;
 
   // Crouching
   p->mo->height = p->mo->info->height;
@@ -3163,6 +3222,11 @@ static void DoSaveGame(char *name)
   saveg_write32(customskill.aggressive);
   saveg_write32(customskill.x2monsters);
   saveg_write32(customskill2.tysontype);
+  saveg_write32(customskill2.shadowtype);
+  saveg_write32(customskill2.nosaves);
+  saveg_write32(customskill2.nocheats);
+  saveg_write32(customskill2.duplicatecount);
+  saveg_write32(customskill2.quadguy);
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -3462,7 +3526,14 @@ static boolean DoLoadGame(boolean do_load_autosave)
     if (saveg_compat > saveg_nugget320)
     { READ(customskill.x2monsters); }
     if (saveg_compat > saveg_nugget460)
-    { READ(customskill2.tysontype);}
+    { 
+        READ(customskill2.tysontype);
+        READ(customskill2.shadowtype);
+        READ(customskill2.nosaves);
+        READ(customskill2.nocheats);
+        READ(customskill2.duplicatecount);
+        READ(customskill2.quadguy);
+    }
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
 
@@ -3703,6 +3774,11 @@ static void G_SaveKeyFrame(void)
   saveg_write32(customskill.aggressive);
   saveg_write32(customskill.x2monsters);
   saveg_write32(customskill2.tysontype);
+  saveg_write32(customskill2.shadowtype);
+  saveg_write32(customskill2.nosaves);
+  saveg_write32(customskill2.nocheats);
+  saveg_write32(customskill2.duplicatecount);
+  saveg_write32(customskill2.quadguy);
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -3960,6 +4036,11 @@ static void G_DoRewind(void)
     customskill.aggressive = saveg_read32();
     customskill.x2monsters = saveg_read32();
     customskill2.tysontype = saveg_read32();
+    customskill2.shadowtype = saveg_read32();
+    customskill2.nosaves = saveg_read32();
+    customskill2.nocheats = saveg_read32();
+    customskill2.duplicatecount = saveg_read32();
+    customskill2.quadguy = saveg_read32();
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
 
@@ -4529,13 +4610,25 @@ void G_PlayerReborn(int player)
   p->weaponowned[wp_pistol] = true;
   p->ammo[am_clip] = initial_bullets; // Ty 03/12/98 - use dehacked values
 
+  p->damagefactor = 1;
+
   if (tysontype)
   {
       p->powers[pw_strength] = true;
       p->nextweapon = p->readyweapon = p->pendingweapon = wp_fist;
   }
      
+  if (shadowtype == 1 || shadowtype == 3)
+  {
+      p->powers[pw_invisibility] = -1;
+  }
 
+  if (quadguy)
+  {
+      p->powers[pw_quad] = -1;
+  }
+      
+ 
 
   for (i=0 ; i<NUMAMMO ; i++)
     p->maxammo[i] = maxammo[i];
@@ -6275,6 +6368,23 @@ void G_BindGameVariables(void)
   M_BindNum("custom_skill_tysontype", &custom_skill_tysontype, NULL,
              0, 0, 2, ss_skill, wad_yes, 
             "Custom Skill: Tyson type (0 = Off; 1 = Classic; 2 = Arcade)");
+  M_BindNum("custom_skill_shadowtype", &custom_skill_shadowtype, NULL, 0, 0, 3,
+            ss_skill, wad_yes,
+            "Custom Skill: Shadow type (0 = Off; 1 = Player only; 2 = Monsters only; 3 = Both)");
+
+  M_BindBool("custom_skill_nosaves", &custom_skill_nosaves, NULL, 0,
+             ss_skill, wad_yes, "Custom Skill: No Saves!");
+
+  M_BindBool("custom_skill_nocheats", &custom_skill_nocheats, NULL, 0,
+              ss_skill, wad_yes, "Custom Skill: No Cheats!");
+
+  M_BindNum("custom_skill_duplicatecount", &custom_skill_duplicatecount, NULL, 0, 0,
+              3, ss_skill, wad_yes,
+              "Custom Skill: Shadow type (0 = x1; 1 = x2; 2 = "
+              "x4; 3 = x8)");
+
+  M_BindBool("custom_skill_quadguy", &custom_skill_quadguy, NULL, 0, ss_skill,
+             wad_yes, "Custom Skill: Infinite Quad Damage");
 
   // [Nugget] ---------------------------------------------------------------/
 

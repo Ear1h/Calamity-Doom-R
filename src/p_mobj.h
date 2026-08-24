@@ -242,6 +242,7 @@ enum {
   MIF_CROUCHING    = 0x00010000,  // Mobj (player) is crouching
   MIF_DONTRENDER   = 0x00020000,
   MIF_FLAKE        = 0x00040000,
+  MIF_ISSHADOW     = 0x00080000,
 };
 
 // Map Object definition.
