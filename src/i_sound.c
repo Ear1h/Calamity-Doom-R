@@ -88,6 +88,7 @@ static int pitch_bend_range;
 // [Nugget]
 boolean s_clipping_dist_x2;
 boolean force_flip_pan; // Brought over from i_mbfsound.c, global
+boolean snd_quad_sound;
 
 // [Nugget] Now variable
 int S_CLIPPING_DIST;
@@ -806,4 +807,6 @@ void I_BindSoundVariables(void)
     {
         music_modules[i]->I_BindVariables();
     }
+
+    BIND_BOOL_SFX(snd_quad_sound, false, "Variable pitch for sound effects");
 }

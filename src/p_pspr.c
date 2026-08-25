@@ -48,6 +48,9 @@
 #include "r_things.h"
 #include "w_wad.h"
 
+// [Calamity]]
+#include "i_sound.h"
+
 // [Nugget] /=================================================================
 
 // CVARs
@@ -773,7 +776,7 @@ static void P_FireWeapon(player_t *player)
   P_NoiseAlert(player->mo, player->mo);
   }
 
-  if (player->powers[pw_quad])
+  if (player->powers[pw_quad] && snd_quad_sound)
   {
       S_StartSoundEx(NULL, sfx_dquact);
   }

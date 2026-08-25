@@ -3145,6 +3145,12 @@ static setup_menu_t sfx_settings1[] = {
     MI_END
 };
 
+static setup_menu_t sfx_settings2[] = {
+    {"Quad Damage sound", S_ONOFF, CNTR_X, M_SPC, {"snd_quad_sound"}},
+
+    MI_END
+};
+
 static const char **GetResamplerStrings(void)
 {
     const char **strings = I_OAL_GetResamplerStrings();
@@ -3152,9 +3158,9 @@ static const char **GetResamplerStrings(void)
     return strings;
 }
 
-static setup_menu_t *sfx_settings[] = {sfx_settings1, NULL};
+static setup_menu_t *sfx_settings[] = {sfx_settings1, sfx_settings2, NULL};
 
-static setup_tab_t sfx_tabs[] = {{"Sound"}, {NULL}};
+static setup_tab_t sfx_tabs[] = {{"Sound"}, {"Calamity"}, {NULL}};
 
 static void MN_Sfx(void)
 {
