@@ -177,7 +177,14 @@ typedef enum {
   pw_allmap,
   pw_infrared,
   NUMPOWERS,
-  pw_quad,   // Quad Damage!
+  pw_quad,      // Quad Damage!
+  pw_haste,     // Fast player, fast weapon and fast switch from Doom 2016
+  pw_leech,     // Vampirism
+  pw_regen,     // Health regen
+  pw_repair,    // Armor Regen
+  pw_double,    // Double damage
+  pw_infinite,  // Infinite Ammo
+  pw_slowtime,  // Slow time!
 } powertype_t;
 
 typedef enum

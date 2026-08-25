@@ -476,6 +476,13 @@ void P_MovePlayer (player_t* player)
             sidemove /= 2;
           }
 
+          if (gameskill == sk_custom && hasteguy) // I'm fast as f*ck boy!
+          {
+              forwardmove *= 2;
+              sidemove *= 2;
+              bobfactor *= 2;
+          }
+
           // [Nugget] -------------------------------------------------------/
 
           if (cmd->forwardmove)
@@ -1037,6 +1044,21 @@ void P_PlayerThink (player_t* player)
 
     if (player->psprites[ps_flash].tics >= 1)
     { player->psprites[ps_flash].tics = 1; }
+  }
+
+  if (gameskill == sk_custom && hasteguy)
+  {
+        if (player->psprites[ps_weapon].tics > 1)
+        { 
+            player->psprites[ps_weapon].tics =
+                player->psprites[ps_weapon].tics + 1 >> 1; 
+        }
+
+        if (player->psprites[ps_flash].tics > 1)
+        { 
+            player->psprites[ps_flash].tics =
+                player->psprites[ps_flash].tics + 1 >> 1;         
+        }
   }
 
   // [Nugget] Linetarget Query cheat

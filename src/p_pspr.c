@@ -1028,7 +1028,7 @@ void A_Lower(player_t *player, pspdef_t *psp)
   }
 
   // [Nugget] Double speed with fast-weapons cheat
-  const int speed = (player->cheats & CF_FASTWEAPS) ? LOWERSPEED*2 : LOWERSPEED;
+  const int speed = ((player->cheats & CF_FASTWEAPS) || (gameskill == sk_custom && hasteguy)) ? LOWERSPEED*2 : LOWERSPEED;
 
   psp->sy += speed;
 
@@ -1079,7 +1079,7 @@ void A_Raise(player_t *player, pspdef_t *psp)
 
   statenum_t newstate;
   // [Nugget] Double speed with fast-weapons cheat
-  const int speed = (player->cheats & CF_FASTWEAPS) ? RAISESPEED*2 : RAISESPEED;
+  const int speed = ((player->cheats & CF_FASTWEAPS) || (gameskill == sk_custom && hasteguy)) ? RAISESPEED*2 : RAISESPEED;
 
   psp->sy -= speed;
 

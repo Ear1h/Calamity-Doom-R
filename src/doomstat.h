@@ -222,6 +222,7 @@ extern  boolean         nosaves;
 extern  boolean         nocheats;
 extern  int             duplicatecount;
 extern  boolean         quadguy;
+extern  boolean         hasteguy;
 
 // [Nugget] -----------------------------------------------------------------/
 

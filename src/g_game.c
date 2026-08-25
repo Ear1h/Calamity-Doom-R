@@ -379,6 +379,17 @@ int custom_skill_duplicatecount;
 // Infinite QuadDamage
 boolean custom_skill_quadguy;
 
+// Infinite Haste
+
+boolean custom_skill_haste;
+
+// Infinite Vampirism
+
+// Infinite Regen
+
+// Infinite Armor repair
+
+
 static struct
 {
     int tysontype;
@@ -387,6 +398,7 @@ static struct
     boolean nocheats;
     int duplicatecount;
     boolean quadguy;
+    boolean hasteguy;
 } customskill2;
 
 
@@ -396,6 +408,7 @@ boolean nosaves;
 boolean nocheats;
 int duplicatecount;
 boolean quadguy;
+boolean hasteguy;
 
 
 int     thingspawns;
@@ -442,6 +455,7 @@ void G_SetSkillParms(const skill_t skill)
     nocheats        = customskill2.nocheats;
     duplicatecount  = customskill2.duplicatecount;
     quadguy         = customskill2.quadguy;
+    hasteguy        = customskill2.hasteguy;
   }
   else {
     thingspawns = (skill == sk_baby || skill == sk_easy)      ? THINGSPAWNS_EASY :
@@ -463,6 +477,7 @@ void G_SetSkillParms(const skill_t skill)
     nocheats = false;
     duplicatecount = 0;
     quadguy = false;
+    hasteguy = false;
   }
 
   G_SetFastParms(fastmonsters);
@@ -486,6 +501,7 @@ void G_SetUserCustomSkill(void)
   customskill2.nocheats = custom_skill_nocheats;
   customskill2.duplicatecount = custom_skill_duplicatecount;
   customskill2.quadguy = custom_skill_quadguy;
+  customskill2.hasteguy = custom_skill_haste;
 }
 
 static void G_UpdateInitialLoadout(void)
@@ -3227,6 +3243,7 @@ static void DoSaveGame(char *name)
   saveg_write32(customskill2.nocheats);
   saveg_write32(customskill2.duplicatecount);
   saveg_write32(customskill2.quadguy);
+  saveg_write32(customskill2.hasteguy);
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -3533,6 +3550,7 @@ static boolean DoLoadGame(boolean do_load_autosave)
         READ(customskill2.nocheats);
         READ(customskill2.duplicatecount);
         READ(customskill2.quadguy);
+        READ(customskill2.hasteguy);
     }
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
@@ -3779,6 +3797,7 @@ static void G_SaveKeyFrame(void)
   saveg_write32(customskill2.nocheats);
   saveg_write32(customskill2.duplicatecount);
   saveg_write32(customskill2.quadguy);
+  saveg_write32(customskill2.hasteguy);
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -4041,6 +4060,7 @@ static void G_DoRewind(void)
     customskill2.nocheats = saveg_read32();
     customskill2.duplicatecount = saveg_read32();
     customskill2.quadguy = saveg_read32();
+    customskill2.hasteguy = saveg_read32();
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
 
@@ -6385,6 +6405,9 @@ void G_BindGameVariables(void)
 
   M_BindBool("custom_skill_quadguy", &custom_skill_quadguy, NULL, 0, ss_skill,
              wad_yes, "Custom Skill: Infinite Quad Damage");
+
+  M_BindBool("custom_skill_haste", &custom_skill_haste, NULL, 0, ss_skill,
+             wad_yes, "Custom Skill: Infinite Haste");
 
   // [Nugget] ---------------------------------------------------------------/
 

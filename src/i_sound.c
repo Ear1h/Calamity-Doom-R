@@ -808,5 +808,5 @@ void I_BindSoundVariables(void)
         music_modules[i]->I_BindVariables();
     }
 
-    BIND_BOOL_SFX(snd_quad_sound, false, "Variable pitch for sound effects");
+    BIND_BOOL_SFX(snd_quad_sound, false, "Quad damage soun effect");
 }

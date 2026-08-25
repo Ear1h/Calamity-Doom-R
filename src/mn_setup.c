@@ -4439,7 +4439,7 @@ static void CSCurrentLoadout(void)
   StartCustomSkill(3);
 }
 
-static setup_tab_t skill_tabs[] = { {"Nugget"}, {"Calamity"}, {NULL} };
+static setup_tab_t skill_tabs[] = {{"Nugget"}, {"Calamity"}, {"Calamity 2"}, {"Loadouts"}, {NULL}};
 
 static setup_menu_t customskill_settings1[] = {
 
@@ -4468,6 +4468,7 @@ static setup_menu_t customskill_settings2[] = {
     {"Tyson Type",                       S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_tysontype"}, .strings_id = str_tysontype},
     {"Infinite Invisibility",            S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_shadowtype"}, .strings_id = str_shadowtype},
     {"Infinite Quad Damage",             S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_quadguy"}},
+    {"Infinite Haste",                   S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_haste"}},
     MI_GAP_Y(4),
     {"No Saves",                         S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_nosaves"}},
     {"No Cheats",                        S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_nocheats"}},
@@ -4482,7 +4483,16 @@ static setup_menu_t customskill_settings2[] = {
     MI_END
 };
 
-static setup_menu_t *customskill_settings[] = {customskill_settings1, customskill_settings2, NULL};
+static setup_menu_t customskill_settings3[] = {
+    MI_END
+};
+
+static setup_menu_t customskill_settingsloadout[] = {
+    MI_END
+};
+
+
+static setup_menu_t *customskill_settings[] = {customskill_settings1, customskill_settings2, customskill_settings3, customskill_settingsloadout, NULL};
 
 void MN_CustomSkill(void)
 {
