@@ -254,6 +254,11 @@ static void M_DrawSaveLoadBorder(int x, int y, byte *cr);
 static void M_DrawThermo(int x, int y, int thermWidth, int thermDot, byte *cr);
 static void WriteText(int x, int y, const char *string);
 static void M_StartMessage(char *string, void (*routine)(int), boolean input);
+static void VerifyConfirmNewVariablesCar(int choice);
+static void VerifyConfirmNewVariablesBlitz(int choice);
+static void VerifyConfirmNewVariablesShadow(int choice);
+static void VerifyConfirmNewVariablesPunch(int choice);
+static void VerifyConfirmNewVariablesSlaughter(int choice);
 
 // phares 3/30/98
 // prototypes added to support Setup Menus and Extended HELP screens
@@ -708,6 +713,166 @@ void M_StartCustomSkill(const int mode)
   }
 
   MN_ClearMenus();
+}
+
+static void CSSkillDefault(void)
+{
+    custom_skill_things = 2;
+    custom_skill_coopspawns = false;
+    custom_skill_nomonsters = false;
+    custom_skill_doubleammo = false;
+    custom_skill_halfdamage = false;
+    custom_skill_slowbrain = false;
+    custom_skill_fast = false;
+    custom_skill_respawn = false;
+    custom_skill_aggressive = false;
+    custom_skill_x2monsters = false;
+
+    custom_skill_tysontype = 0;
+    custom_skill_shadowtype = 0;
+    custom_skill_nosaves = false;
+    custom_skill_nocheats = false;
+    custom_skill_duplicatecount = 0;
+    custom_skill_quadguy = false;
+    custom_skill_haste = false;
+}
+
+
+void M_ConfirmNewVariables(const int loadout)
+{
+    switch (loadout)
+    {
+        case 0:
+            M_StartMessage("Enemies will spawn as Ultra-Violence. \n"
+                           "They get faster, and you get faster.\n" 
+                           "\n"
+                           "Confirm new game? Y/N",
+                           VerifyConfirmNewVariablesCar, true); 
+            break;
+        case 1:
+            M_StartMessage("Enemies behave as they do in Nightmare skill.\n"
+                           "You're fast, and your weapons deal 4x damage.\n" 
+                           "It's perfect for Blitz: Race Against Time wad\n"
+                           "\n"
+                           "Confirm new game? Y/N",
+                           VerifyConfirmNewVariablesBlitz, true);
+            break;
+        case 2:
+            M_StartMessage("You and your opponents are invisible. \n"
+                           "You have berserk right from the start.\n" 
+                           "\n"
+                           "Confirm new game? Y/N",
+                           VerifyConfirmNewVariablesShadow, true);
+            break;
+        case 3:
+            M_StartMessage("Your fists deal massive damage\n"
+                           "with Quad Damage.\n"
+                           "Before that, do 100 push-ups,\n"
+                           "100 squats, and run 10 km.\n"
+                           "\n"
+                           "Confirm new game? Y/N",
+                           VerifyConfirmNewVariablesPunch, true);
+            break;
+        case 4:
+            M_StartMessage("Enemies can be duplicated up to\n"
+                           "8 times their original number.\n" 
+                           "They respawn infinitely.\n" 
+                           "You have quad damage.\n" 
+                           "Suitable for slotter maps\n"
+                           "\n"
+                           "Confirm new game? Y/N",
+                           VerifyConfirmNewVariablesSlaughter, true);
+            break;
+
+    }
+    
+}
+
+static void VerifyConfirmNewVariablesCar(int choice)
+{
+    if (choice != 'y')
+    {
+        setup_active = false;
+        return;
+    }
+    CSSkillDefault();
+    custom_skill_things = 2; // Hard
+    custom_skill_fast = true;
+    custom_skill_haste = true;
+
+    
+    setup_active = false;
+    M_StartCustomSkill(0);
+
+}
+
+static void VerifyConfirmNewVariablesBlitz(int choice)
+{
+    if (choice != 'y')
+    {
+        setup_active = false;
+        return;
+    }
+    CSSkillDefault();
+    custom_skill_things = 2; // Hard
+    custom_skill_fast = true;
+    custom_skill_respawn = true;
+    custom_skill_aggressive = true;
+
+    custom_skill_haste = true;
+    custom_skill_quadguy = true;
+
+    setup_active = false;
+    M_StartCustomSkill(0);
+}
+
+static void VerifyConfirmNewVariablesShadow(int choice)
+{
+    if (choice != 'y')
+    {
+        setup_active = false;
+        return;
+    }
+    CSSkillDefault();
+    custom_skill_things = 2;     // Hard
+    custom_skill_tysontype = 2;  // Arcade
+    custom_skill_shadowtype = 3; // Both
+
+    setup_active = false;
+    M_StartCustomSkill(0);
+}
+
+static void VerifyConfirmNewVariablesPunch(int choice)
+{
+    if (choice != 'y')
+    {
+        setup_active = false;
+        return;
+    }
+    CSSkillDefault();
+    custom_skill_things = 2;    // Hard
+    custom_skill_tysontype = 2; // Arcade
+    custom_skill_quadguy = true;
+
+    setup_active = false;
+    M_StartCustomSkill(0);
+}
+
+static void VerifyConfirmNewVariablesSlaughter(int choice)
+{
+    if (choice != 'y')
+    {
+        setup_active = false;
+        return;
+    }
+    CSSkillDefault();
+    custom_skill_things = 2; // Hard
+    custom_skill_respawn = true;
+    custom_skill_duplicatecount = 3; // x8
+    custom_skill_quadguy = true;
+
+    setup_active = false;
+    M_StartCustomSkill(0);
 }
 
 // [Nugget] -----------------------------------------------------------------/

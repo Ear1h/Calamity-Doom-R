@@ -123,6 +123,7 @@ void M_StartSound(int sound_id);
 void M_StartSoundOptional(const int opt_sound_id, const int sound_id); // [Nugget]
 
 void M_StartCustomSkill(const int mode); // [Nugget] Custom Skill
+void M_ConfirmNewVariables(const int loadout); //[Calamity] Reset and set new defaults
 
 void MN_BindMenuVariables(void);
 

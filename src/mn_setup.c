@@ -4439,7 +4439,39 @@ static void CSCurrentLoadout(void)
   StartCustomSkill(3);
 }
 
-static setup_tab_t skill_tabs[] = {{"Nugget"}, {"Calamity"}, {"Calamity 2"}, {"Loadouts"}, {NULL}};
+
+
+static void CSSetUserCustomSkillLoadouts(int loadout)
+{
+    M_ConfirmNewVariables(loadout);
+}
+
+static void CSCargo(void)
+{
+    CSSetUserCustomSkillLoadouts(0);
+}
+
+static void CSBlitz(void)
+{
+    CSSetUserCustomSkillLoadouts(1);
+}
+
+static void CSShadow(void)
+{
+    CSSetUserCustomSkillLoadouts(2);
+}
+
+static void CSPunchman(void)
+{
+    CSSetUserCustomSkillLoadouts(3);
+}
+
+static void CSSlaughter(void)
+{
+    CSSetUserCustomSkillLoadouts(4);
+}
+
+static setup_tab_t skill_tabs[] = {{"Nugget"}, {"Calamity"}, {"Modificators"}, {"Loadouts"}, {NULL}};
 
 static setup_menu_t customskill_settings1[] = {
 
@@ -4460,7 +4492,7 @@ static setup_menu_t customskill_settings1[] = {
     {"Restart Level -- Pistol Start",    S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSPistolStart},
     {"Restart Level -- Initial Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSInitialLoadout},
     {"Restart Level -- Current Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSCurrentLoadout},
-
+    MI_RESET,
     MI_END
 };
 
@@ -4479,15 +4511,32 @@ static setup_menu_t customskill_settings2[] = {
     {"Restart Level -- Pistol Start",    S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSPistolStart},
     {"Restart Level -- Initial Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSInitialLoadout},
     {"Restart Level -- Current Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSCurrentLoadout},
-
+    MI_RESET,
     MI_END
 };
 
 static setup_menu_t customskill_settings3[] = {
+    MI_RESET,
     MI_END
 };
 
 static setup_menu_t customskill_settingsloadout[] = {
+    {"Haste Includes",                   S_SKIP | S_TITLE, M_X, M_SPC},
+    {"Car go Fast!",                     S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSCargo},
+    {"Blitz Runner",                     S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSBlitz},
+    MI_GAP_Y(4),
+    {"Tyson Includes",                   S_SKIP | S_TITLE, M_X, M_SPC},
+    {"Shadow fight",                     S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSShadow},
+    {"Punch man",                        S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSPunchman},
+    MI_GAP_Y(4),
+    {"Multiple things Includes",         S_SKIP | S_TITLE, M_X, M_SPC},
+    {"Slaughterhouse",                   S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSSlaughter},
+    MI_GAP,
+    {"Start New Game",                   S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSNewGame},
+    {"Restart Level -- Pistol Start",    S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSPistolStart},
+    {"Restart Level -- Initial Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSInitialLoadout},
+    {"Restart Level -- Current Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSCurrentLoadout},
+    MI_RESET,
     MI_END
 };
 
@@ -4511,6 +4560,11 @@ void MN_DrawCustomSkill(void)
     DrawTabs();
     DrawInstructions();
     DrawScreenItems(current_menu);
+
+    if (default_verify)
+    {
+        DrawDefVerify();
+    }
 }
 
 // [Nugget] =================================================================/

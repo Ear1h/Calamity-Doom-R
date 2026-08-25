@@ -1051,13 +1051,13 @@ void P_PlayerThink (player_t* player)
         if (player->psprites[ps_weapon].tics > 1)
         { 
             player->psprites[ps_weapon].tics =
-                player->psprites[ps_weapon].tics + 1 >> 1; 
+                (player->psprites[ps_weapon].tics + 1) >> 1; 
         }
 
         if (player->psprites[ps_flash].tics > 1)
         { 
             player->psprites[ps_flash].tics =
-                player->psprites[ps_flash].tics + 1 >> 1;         
+                (player->psprites[ps_flash].tics + 1) >> 1;         
         }
   }
 

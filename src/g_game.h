@@ -201,8 +201,18 @@ extern boolean custom_skill_respawn;
 extern boolean custom_skill_aggressive;
 extern boolean custom_skill_x2monsters;
 
+extern int custom_skill_tysontype;
+extern int custom_skill_shadowtype;
+extern boolean custom_skill_nosaves;
+extern boolean custom_skill_nocheats;
+extern int custom_skill_duplicatecount;
+extern boolean custom_skill_quadguy;
+extern boolean custom_skill_haste;
+
+
 void G_SetSkillParms(const skill_t skill);
 void G_SetUserCustomSkill(void);
+void G_SetUserCustomSkillLoadouts(int loadout);
 void G_RestartWithLoadout(const boolean current);
 
 #endif
