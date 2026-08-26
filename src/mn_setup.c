@@ -4501,6 +4501,7 @@ static setup_menu_t customskill_settings2[] = {
     {"Infinite Invisibility",            S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_shadowtype"}, .strings_id = str_shadowtype},
     {"Infinite Quad Damage",             S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_quadguy"}},
     {"Infinite Haste",                   S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_haste"}},
+    {"Infinite Vampirism",               S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_vampirism"}},
     MI_GAP_Y(4),
     {"No Saves",                         S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_nosaves"}},
     {"No Cheats",                        S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_nocheats"}},

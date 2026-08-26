@@ -216,6 +216,8 @@ extern  boolean         slowbrain;
 extern  boolean         fastmonsters;
 extern  boolean         aggressive;
 extern  boolean         x2monsters;
+
+// [ Calamity ]
 extern  int             tysontype;
 extern  int             shadowtype;
 extern  boolean         nosaves;
@@ -223,6 +225,9 @@ extern  boolean         nocheats;
 extern  int             duplicatecount;
 extern  boolean         quadguy;
 extern  boolean         hasteguy;
+extern  boolean         vampire;
+extern  int             regentype;
+extern  int             repairtype;
 
 // [Nugget] -----------------------------------------------------------------/
 

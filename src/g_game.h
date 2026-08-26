@@ -208,6 +208,9 @@ extern boolean custom_skill_nocheats;
 extern int custom_skill_duplicatecount;
 extern boolean custom_skill_quadguy;
 extern boolean custom_skill_haste;
+extern boolean custom_skill_vampirism;
+extern int custom_skill_regeneration;
+extern int custom_skill_armorrepair;
 
 
 void G_SetSkillParms(const skill_t skill);

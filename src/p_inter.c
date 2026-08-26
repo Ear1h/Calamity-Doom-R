@@ -1214,12 +1214,24 @@ void P_DamageMobjBy(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage
   if (gameskill == sk_custom && inflictor && inflictor->player) // Damage from players projectile 
   {
       damage *= inflictor->player->damagefactor;
+      if (vampire && inflictor->player->health <= maxhealthbonus)
+      {
+          inflictor->player->health += (damage * 10) / 100;
+          if (inflictor->player->health > maxhealthbonus)
+              inflictor->player->health = maxhealthbonus;
+      }
   }
 
   else if (gameskill == sk_custom && source && source->player) // Damage from players hitscan
        
   {
       damage *= source->player->damagefactor;
+      if (vampire && source->player->health <= maxhealthbonus)
+      {
+          source->player->health += (damage * 10) / 100;
+          if (source->player->health > maxhealthbonus)
+              source->player->health = maxhealthbonus;
+      }
   }
 
   player = target->player;

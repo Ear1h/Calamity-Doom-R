@@ -354,41 +354,17 @@ static struct {
 } customskill;
 
 // [Calamity. New Skills]
-// 0 - Off
-// 1 - Classic
-// 2 - Arcade (Every enemy drops any health)
-int custom_skill_tysontype;
 
-// Infinite Invisibility
-// 0 - off
-// 1 - Player only
-// 2 - Monsters
-// 3 - Both
-int custom_skill_shadowtype;
-
-boolean custom_skill_nosaves;
-boolean custom_skill_nocheats;
-
-// x1 - standart
-// x2 - like a Nugget's thing multiple 
-// x4 - quad
-// x8 - fuck...
-
-int custom_skill_duplicatecount;
-
-// Infinite QuadDamage
-boolean custom_skill_quadguy;
-
-// Infinite Haste
-
-boolean custom_skill_haste;
-
-// Infinite Vampirism
-
-// Infinite Regen
-
-// Infinite Armor repair
-
+int custom_skill_tysontype;         // Berserk only
+int custom_skill_shadowtype;        // Infinite Invisibility
+boolean custom_skill_nosaves;       // No saves
+boolean custom_skill_nocheats;      // No cheats
+int custom_skill_duplicatecount;    // x1-x8 duplicate
+boolean custom_skill_quadguy;       // Infinite QuadDamage
+boolean custom_skill_haste;         // Infinite Haste
+boolean custom_skill_vampirism;     // Infinite Vampirism
+int custom_skill_regeneration;      // Infinite Regen
+int custom_skill_armorrepair;       // Infinite Armor repair
 
 static struct
 {
@@ -399,6 +375,9 @@ static struct
     int duplicatecount;
     boolean quadguy;
     boolean hasteguy;
+    boolean vampire;
+    int regentype;
+    int repairtype;
 } customskill2;
 
 
@@ -409,6 +388,9 @@ boolean nocheats;
 int duplicatecount;
 boolean quadguy;
 boolean hasteguy;
+boolean vampire;
+int regentype;
+int repairtype;
 
 
 int     thingspawns;
@@ -456,6 +438,9 @@ void G_SetSkillParms(const skill_t skill)
     duplicatecount  = customskill2.duplicatecount;
     quadguy         = customskill2.quadguy;
     hasteguy        = customskill2.hasteguy;
+    vampire         = customskill2.vampire;
+    regentype       = customskill2.regentype;
+    repairtype      = customskill2.repairtype;
   }
   else {
     thingspawns = (skill == sk_baby || skill == sk_easy)      ? THINGSPAWNS_EASY :
@@ -478,6 +463,9 @@ void G_SetSkillParms(const skill_t skill)
     duplicatecount = 0;
     quadguy = false;
     hasteguy = false;
+    vampire = false;
+    regentype = 0;
+    repairtype = 0;
   }
 
   G_SetFastParms(fastmonsters);
@@ -485,23 +473,28 @@ void G_SetSkillParms(const skill_t skill)
 
 void G_SetUserCustomSkill(void)
 {
-  customskill.things     = custom_skill_things;
-  customskill.coopspawns = custom_skill_coopspawns;
-  customskill.nomonsters = custom_skill_nomonsters;
-  customskill.doubleammo = custom_skill_doubleammo;
-  customskill.halfdamage = custom_skill_halfdamage;
-  customskill.slowbrain  = custom_skill_slowbrain;
-  customskill.fast       = custom_skill_fast;
-  customskill.respawn    = custom_skill_respawn;
-  customskill.aggressive = custom_skill_aggressive;
-  customskill.x2monsters = custom_skill_x2monsters;
-  customskill2.tysontype = custom_skill_tysontype;
-  customskill2.shadowtype = custom_skill_shadowtype;
-  customskill2.nosaves  = custom_skill_nosaves;
-  customskill2.nocheats = custom_skill_nocheats;
-  customskill2.duplicatecount = custom_skill_duplicatecount;
-  customskill2.quadguy = custom_skill_quadguy;
-  customskill2.hasteguy = custom_skill_haste;
+  customskill.things            = custom_skill_things;
+  customskill.coopspawns        = custom_skill_coopspawns;
+  customskill.nomonsters        = custom_skill_nomonsters;
+  customskill.doubleammo        = custom_skill_doubleammo;
+  customskill.halfdamage        = custom_skill_halfdamage;
+  customskill.slowbrain         = custom_skill_slowbrain;
+  customskill.fast              = custom_skill_fast;
+  customskill.respawn           = custom_skill_respawn;
+  customskill.aggressive        = custom_skill_aggressive;
+  customskill.x2monsters        = custom_skill_x2monsters;
+
+  // [Calamity]
+  customskill2.tysontype        = custom_skill_tysontype;
+  customskill2.shadowtype       = custom_skill_shadowtype;
+  customskill2.nosaves          = custom_skill_nosaves;
+  customskill2.nocheats         = custom_skill_nocheats;
+  customskill2.duplicatecount   = custom_skill_duplicatecount;
+  customskill2.quadguy          = custom_skill_quadguy;
+  customskill2.hasteguy         = custom_skill_haste;
+  customskill2.vampire          = custom_skill_vampirism;
+  customskill2.regentype        = custom_skill_regeneration;
+  customskill2.repairtype       = custom_skill_armorrepair;
 }
 
 static void G_UpdateInitialLoadout(void)
@@ -3244,6 +3237,9 @@ static void DoSaveGame(char *name)
   saveg_write32(customskill2.duplicatecount);
   saveg_write32(customskill2.quadguy);
   saveg_write32(customskill2.hasteguy);
+  saveg_write32(customskill2.vampire);
+  saveg_write32(customskill2.regentype);
+  saveg_write32(customskill2.repairtype);
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -3551,6 +3547,9 @@ static boolean DoLoadGame(boolean do_load_autosave)
         READ(customskill2.duplicatecount);
         READ(customskill2.quadguy);
         READ(customskill2.hasteguy);
+        READ(customskill2.vampire);
+        READ(customskill2.regentype);
+        READ(customskill2.repairtype);
     }
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
@@ -3798,6 +3797,9 @@ static void G_SaveKeyFrame(void)
   saveg_write32(customskill2.duplicatecount);
   saveg_write32(customskill2.quadguy);
   saveg_write32(customskill2.hasteguy);
+  saveg_write32(customskill2.vampire);
+  saveg_write32(customskill2.regentype);
+  saveg_write32(customskill2.repairtype);
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -4061,6 +4063,9 @@ static void G_DoRewind(void)
     customskill2.duplicatecount = saveg_read32();
     customskill2.quadguy = saveg_read32();
     customskill2.hasteguy = saveg_read32();
+    customskill2.vampire = saveg_read32();
+    customskill2.regentype = saveg_read32();
+    customskill2.repairtype = saveg_read32();
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
 
@@ -6408,6 +6413,9 @@ void G_BindGameVariables(void)
 
   M_BindBool("custom_skill_haste", &custom_skill_haste, NULL, 0, ss_skill,
              wad_yes, "Custom Skill: Infinite Haste");
+
+  M_BindBool("custom_skill_vampirism", &custom_skill_vampirism, NULL, 0, ss_skill,
+             wad_yes, "Custom Skill: Infinite Vampirism");
 
   // [Nugget] ---------------------------------------------------------------/
 
