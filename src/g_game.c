@@ -365,6 +365,7 @@ boolean custom_skill_haste;         // Infinite Haste
 boolean custom_skill_vampirism;     // Infinite Vampirism
 int custom_skill_regeneration;      // Infinite Regen
 int custom_skill_armorrepair;       // Infinite Armor repair
+boolean custom_skill_NoHealthArmor; // No Health and Armor
 
 static struct
 {
@@ -378,6 +379,7 @@ static struct
     boolean vampire;
     int regentype;
     int repairtype;
+    boolean NoHealthArmor;
 } customskill2;
 
 
@@ -391,6 +393,7 @@ boolean hasteguy;
 boolean vampire;
 int regentype;
 int repairtype;
+boolean nohealtharmor;
 
 
 int     thingspawns;
@@ -441,6 +444,7 @@ void G_SetSkillParms(const skill_t skill)
     vampire         = customskill2.vampire;
     regentype       = customskill2.regentype;
     repairtype      = customskill2.repairtype;
+    nohealtharmor   = customskill2.NoHealthArmor;
   }
   else {
     thingspawns = (skill == sk_baby || skill == sk_easy)      ? THINGSPAWNS_EASY :
@@ -466,6 +470,7 @@ void G_SetSkillParms(const skill_t skill)
     vampire = false;
     regentype = 0;
     repairtype = 0;
+    nohealtharmor = false;
   }
 
   G_SetFastParms(fastmonsters);
@@ -495,6 +500,7 @@ void G_SetUserCustomSkill(void)
   customskill2.vampire          = custom_skill_vampirism;
   customskill2.regentype        = custom_skill_regeneration;
   customskill2.repairtype       = custom_skill_armorrepair;
+  customskill2.NoHealthArmor    = custom_skill_NoHealthArmor;
 }
 
 static void G_UpdateInitialLoadout(void)
@@ -3240,6 +3246,7 @@ static void DoSaveGame(char *name)
   saveg_write32(customskill2.vampire);
   saveg_write32(customskill2.regentype);
   saveg_write32(customskill2.repairtype);
+  saveg_write32(customskill2.NoHealthArmor);
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -3550,6 +3557,7 @@ static boolean DoLoadGame(boolean do_load_autosave)
         READ(customskill2.vampire);
         READ(customskill2.regentype);
         READ(customskill2.repairtype);
+        READ(customskill2.NoHealthArmor);
     }
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
@@ -3800,6 +3808,7 @@ static void G_SaveKeyFrame(void)
   saveg_write32(customskill2.vampire);
   saveg_write32(customskill2.regentype);
   saveg_write32(customskill2.repairtype);
+  saveg_write32(customskill2.NoHealthArmor);
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -4066,6 +4075,7 @@ static void G_DoRewind(void)
     customskill2.vampire = saveg_read32();
     customskill2.regentype = saveg_read32();
     customskill2.repairtype = saveg_read32();
+    customskill2.NoHealthArmor = saveg_read32();
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
 
@@ -6416,6 +6426,13 @@ void G_BindGameVariables(void)
 
   M_BindBool("custom_skill_vampirism", &custom_skill_vampirism, NULL, 0, ss_skill,
              wad_yes, "Custom Skill: Infinite Vampirism");
+
+  M_BindBool("custom_skill_NoHealthArmor", &custom_skill_NoHealthArmor, NULL, 0,
+             ss_skill, wad_yes, "Custom Skill: No Heal and Armor pickups");
+
+  M_BindNum("custom_skill_regentype", &custom_skill_regeneration, NULL, 0, 0, 2,
+            ss_skill, wad_yes,
+            "Custom Skill: Regeneration Type (0 = Off, 1 = Full, 2 = Partial");
 
   // [Nugget] ---------------------------------------------------------------/
 

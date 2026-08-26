@@ -101,15 +101,17 @@ typedef struct {
 extern overflow_t overflow[EMU_TOTAL];
 
 typedef enum {
-  DV_NONE    = -1,
-  DV_VANILLA = 109,
-  DV_LONGTIC = 111,
-  DV_BOOM200 = 200,
-  DV_BOOM201 = 201,
-  DV_BOOM    = 202,
-  DV_MBF     = 203,
-  DV_MBF21   = 221,
-  DV_UM      = 255,
+  DV_NONE       = -1,
+  DV_VANILLA    = 109,
+  DV_LONGTIC    = 111,
+  DV_BOOM200    = 200,
+  DV_BOOM201    = 201,
+  DV_BOOM       = 202,
+  DV_MBF        = 203,
+  DV_MBF21      = 221,
+  DV_ID24       = 224,
+  DV_CALAMITY   = 250,   // Specific from Hell 3emlya features like alt-fire, custom powerup and etc.
+  DV_UM         = 255,
 } demo_version_t;
 
 extern demo_version_t demo_version;           // killough 7/19/98: Version of demo
@@ -120,6 +122,10 @@ extern demo_version_t demo_version;           // killough 7/19/98: Version of de
 #define demo_compatibility (demo_version < DV_BOOM200) /* killough 11/98: macroized */
 
 #define mbf21 (demo_version == DV_MBF21)
+#define id24  (demo_version == DV_ID24)
+
+// Vladislav Putintsev (Unfinished)
+#define Calamity (demoversion == DV_CALAMITY)
 
 // killough 7/19/98: whether monsters should fight against each other
 extern boolean monster_infighting, default_monster_infighting;
@@ -228,6 +234,7 @@ extern  boolean         hasteguy;
 extern  boolean         vampire;
 extern  int             regentype;
 extern  int             repairtype;
+extern  boolean         nohealtharmor;
 
 // [Nugget] -----------------------------------------------------------------/
 

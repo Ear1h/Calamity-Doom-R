@@ -392,6 +392,7 @@ enum
     str_tysontype,
     str_shadowtype,
     str_duplicatecount,
+    str_regentype,
 };
 
 static const char **GetStrings(int id);
@@ -4409,6 +4410,11 @@ static const char *duplicate_count[] = {
     "x1", "x2", "x4", "x8"
 };
 
+static const char *regen_type[] = {
+    "Off", "Full", "Partial"
+};
+
+
 static void StartCustomSkill(const int mode)
 {
   SetItemOn(set_item_on);
@@ -4502,9 +4508,11 @@ static setup_menu_t customskill_settings2[] = {
     {"Infinite Quad Damage",             S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_quadguy"}},
     {"Infinite Haste",                   S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_haste"}},
     {"Infinite Vampirism",               S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_vampirism"}},
+    {"Infinite Regeneration",            S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_regentype"}, .strings_id = str_regentype},
     MI_GAP_Y(4),
     {"No Saves",                         S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_nosaves"}},
     {"No Cheats",                        S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_nocheats"}},
+    {"No Health and Armor pickups",      S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_NoHealthArmor"}},        
     MI_GAP_Y(4),
     {"Duplicate Monsters Extended",      S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_duplicatecount"}, .strings_id = str_duplicatecount},
     MI_GAP,
@@ -6080,6 +6088,7 @@ static const char **selectstrings[] = {
     tyson_type,
     shadow_type,
     duplicate_count,
+    regen_type,
 };
 
 static const char **GetStrings(int id)

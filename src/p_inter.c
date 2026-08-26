@@ -1216,9 +1216,16 @@ void P_DamageMobjBy(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage
       damage *= inflictor->player->damagefactor;
       if (vampire && inflictor->player->health <= maxhealthbonus)
       {
-          inflictor->player->health += (damage * 10) / 100;
-          if (inflictor->player->health > maxhealthbonus)
-              inflictor->player->health = maxhealthbonus;
+          // No Heal himself
+          if (!target->player)
+          {
+              inflictor->player->health += (damage * 10) / 100;
+              if (inflictor->player->health > maxhealthbonus)
+              {
+                  inflictor->player->mo->health = inflictor->player->health;
+                  inflictor->player->health = maxhealthbonus;
+              }
+          }
       }
   }
 
@@ -1228,9 +1235,16 @@ void P_DamageMobjBy(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage
       damage *= source->player->damagefactor;
       if (vampire && source->player->health <= maxhealthbonus)
       {
-          source->player->health += (damage * 10) / 100;
-          if (source->player->health > maxhealthbonus)
-              source->player->health = maxhealthbonus;
+          // No Heal himself
+          if (!target->player)
+          {   
+              source->player->health += (damage * 10) / 100;
+              source->player->mo->health = source->player->health;
+              if (source->player->health > maxhealthbonus)
+              {
+                  source->player->health = maxhealthbonus;
+              }
+          }
       }
   }
 

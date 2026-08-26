@@ -48,6 +48,9 @@
 #include "s_sound.h"
 #include "sounds.h"
 
+// [Calamity] 
+#include "p_inter.h"
+
 static fixed_t PlayerSlope(player_t *player)
 {
   // [Nugget] Factored out to `p_map.c/h`
@@ -1014,6 +1017,82 @@ void P_PlayerThink (player_t* player)
           player->damagefactor = 1;
       }
   }
+
+   if ((regentype == 1 || regentype == 2) && gameskill == sk_custom)
+   {
+       if ((!(leveltime & 0x3f) && player->health < maxhealth) && regentype == 1) // Every 63 tics and don't have MAXHEALTH
+       {
+           player->health += 5;
+           if (player->health > maxhealth)
+               player->health = maxhealth;
+           player->mo->health = player->health;
+       }
+
+       int regenCap = maxhealth;
+       if (regentype == 2)
+       {
+           int regenSegment = maxhealth / 5;
+           if (regenSegment < 1)
+           {
+               regenSegment = 1;
+           }
+           regenCap =
+               ((player->health + regenSegment - 1) / regenSegment) * regenSegment;
+           if (regenCap > maxhealth)
+           {
+               regenCap = maxhealth;
+           }
+       }
+
+       if (player->health < regenCap && (!(leveltime & (0x3f))))
+       {
+           if (player->health >= (maxhealth * 75) / 100)
+           {
+               player->health += 5;
+
+               if (player->health > regenCap)
+               {
+                   player->health = regenCap;
+               }
+
+               player->mo->health = player->health;
+           }
+           else if ((player->health >= (maxhealth * 50) / 100 && (player->health <= (maxhealth * 75) / 100)))
+           {
+                player->health += 6;
+
+                if (player->health > regenCap)
+                {
+                    player->health = regenCap;
+                }
+
+                player->mo->health = player->health;
+           }
+           else if ((player->health >= (maxhealth * 25) / 100 && (player->health <= (maxhealth * 50) / 100)))
+           {
+               player->health += 8;
+
+               if (player->health > regenCap)
+               {
+                   player->health = regenCap;
+               }
+
+               player->mo->health = player->health;
+           }
+           else if ((player->health <= (maxhealth * 25 / 100)))
+           {
+               player->health += 10;
+
+               if (player->health > regenCap)
+               {
+                   player->health = regenCap;
+               }
+
+               player->mo->health = player->health;
+           }
+           
+       }
+   }
 
   // killough 1/98: Make idbeholdx toggle:
 

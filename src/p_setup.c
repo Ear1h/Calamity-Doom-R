@@ -463,6 +463,29 @@ void P_LoadThings (int lump)
       mt->type = SHORT(mt->type);
       mt->options = SHORT(mt->options);
 
+      // [Calamity]
+      // Delete Armor & Health in nohealtharmor mode
+      // Planned to support ID24 PickupItem to check compat future mod where added new items
+
+      if (gameskill == sk_custom && nohealtharmor)
+      {
+          switch (mt->type)
+          {
+              case 2011:
+              case 2012:
+              case 2014:
+              case 2015:
+              case 2018:
+              case 2019:
+              case 83:
+              case 2013:
+              case 2023:
+                  continue; 
+          }
+      }
+
+      //////////////////////////////////////////////
+
       const boolean shadowflag = (shadowtype == 2 || shadowtype == 3);
 
       for (int i = 0; i < num_mobj_types; i++)
