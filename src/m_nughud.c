@@ -175,6 +175,8 @@ default_t nughud_defaults[] = {
 
   TEXTLINE( "nughud_secret", nughud.secret, 160, (SCREENHEIGHT - ST_HEIGHT) / 4, 0, 0, 1, 0 ),
 
+  TEXTLINE( "nughud_partime", nughud.partime, -1, -1, -1, -1, 3, 2 ),
+
   STACK(1,   2,   0, -1, -1,  1),
   STACK(2, 318,   0,  1,  1,  1),
   STACK(3,   2, 168, -1, -1, -1),

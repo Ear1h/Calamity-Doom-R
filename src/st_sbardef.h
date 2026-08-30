@@ -142,6 +142,7 @@ typedef enum
 
     sbw_start_nugget = 32,
     sbw_powers = 32,
+    sbw_partime = 33,
     sbw_end_nugget,
 
     sbw_max_nugget = sbw_end_nugget - sbw_start_nugget,

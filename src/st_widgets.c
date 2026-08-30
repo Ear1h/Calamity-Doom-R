@@ -69,6 +69,7 @@ boolean hud_time[NUMTIMERS];
 
 static int hud_power_timers;
 static boolean hud_power_timers_notime;
+static int hud_partime;
 
 static boolean hud_allow_icons;
 
@@ -81,6 +82,7 @@ static int hudcolor_items;
 static int hudcolor_secrets;
 static int hudcolor_ms_incomp;
 static int hudcolor_ms_comp;
+static int hudcolor_partime;
 
 boolean announce_milestones;
 boolean announce_milestone_kills;
@@ -1494,7 +1496,7 @@ static void UpdatePowers(sbe_widget_t *widget, player_t *player)
           } \
         }
 
-    if (gameskill != sk_custom && !shadowtype)
+    if (!shadowtype)
         POWERUP_TIMER(pw_invisibility,    INVISTICS,  3, "INVIS", CR_RED);
     POWERUP_TIMER(pw_invulnerability, INVULNTICS, 4, "INVUL", CR_GREEN);
     POWERUP_TIMER(pw_infrared,        INFRATICS,  5, "LIGHT", CR_BRICK);
@@ -1506,6 +1508,22 @@ static void UpdatePowers(sbe_widget_t *widget, player_t *player)
 
     string[offset - 1] = '\0'; // Trim trailing space
     SetLine(widget, string);
+}
+
+static void UpdatePartime(sbe_widget_t *widget, player_t *player)
+{
+    ST_ClearLines(widget);
+
+    if (!WidgetEnabled(hud_partime))
+    {
+        return;
+    }
+
+    ForceDoomFont(widget);
+
+    static char string[80];
+    M_snprintf(string, sizeof(string), "ParTime: \x1b%c%d:%02d",'0' + hudcolor_partime, (wminfo.partime / TICRATE) / 60, (wminfo.partime / TICRATE) % 60);
+    ST_AddLine(widget, string);
 }
 
 // [crispy] print a bar indicating demo progress at the bottom of the screen
@@ -1697,6 +1715,9 @@ void ST_UpdateWidget(sbarelem_t *elem, player_t *player)
         case sbw_speed:
             UpdateSpeed(widget, player);
             break;
+        case sbw_partime:
+            UpdatePartime(widget, player);
+            break;
 
         // [Nugget]
         case sbw_powers: UpdatePowers(widget, player); break;
@@ -1789,6 +1810,10 @@ void ST_BindHUDVariables(void)
             HUD_WIDGET_OFF, HUD_WIDGET_OFF, HUD_WIDGET_ALWAYS, ss_stat, wad_no,
             "Show powerup-timers widget (1 = On automap; 2 = On HUD; 3 = Always)");
 
+  M_BindNum("hud_partime", &hud_partime, NULL,
+            HUD_WIDGET_OFF, HUD_WIDGET_OFF, HUD_WIDGET_ALWAYS, ss_stat, wad_no,
+            "Show partime widget (1 = On automap; 2 = On HUD; 3 = Always)");
+
   // (CFG-only)
   M_BindBool("hud_power_timers_notime", &hud_power_timers_notime, NULL,
              false, ss_none, wad_no,
@@ -1845,6 +1870,9 @@ void ST_BindHUDVariables(void)
   M_BindNum("hudcolor_ms_comp", &hudcolor_ms_comp, NULL,
             CR_BLUE1, CR_BRICK, CR_NONE, ss_hudcol, wad_yes,
             "Color used for complete milestones in Stats display");
+
+  M_BindNum("hudcolor_partime", &hudcolor_partime, NULL, CR_GRAY, CR_BRICK, CR_NONE,
+            ss_hudcol, wad_yes, "Color used for par time in partime display");
 
   // [Nugget] ---------------------------------------------------------------/
 

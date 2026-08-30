@@ -366,6 +366,8 @@ boolean custom_skill_vampirism;     // Infinite Vampirism
 int custom_skill_regeneration;      // Infinite Regen
 int custom_skill_armorrepair;       // Infinite Armor repair
 boolean custom_skill_NoHealthArmor; // No Health and Armor
+boolean custom_skill_partimelimit;  // Countdown to Death
+boolean custom_skill_bullethell;    // Bullet Hell (Changes monsters hitscan attack to projectile
 
 static struct
 {
@@ -380,6 +382,8 @@ static struct
     int regentype;
     int repairtype;
     boolean NoHealthArmor;
+    boolean partimelimit;
+    boolean bullethell;
 } customskill2;
 
 
@@ -394,6 +398,8 @@ boolean vampire;
 int regentype;
 int repairtype;
 boolean nohealtharmor;
+boolean Partimelimit;
+boolean bullethell;
 
 
 int     thingspawns;
@@ -445,6 +451,8 @@ void G_SetSkillParms(const skill_t skill)
     regentype       = customskill2.regentype;
     repairtype      = customskill2.repairtype;
     nohealtharmor   = customskill2.NoHealthArmor;
+    Partimelimit    = customskill2.partimelimit;
+    bullethell      = customskill2.bullethell;
   }
   else {
     thingspawns = (skill == sk_baby || skill == sk_easy)      ? THINGSPAWNS_EASY :
@@ -471,6 +479,8 @@ void G_SetSkillParms(const skill_t skill)
     regentype = 0;
     repairtype = 0;
     nohealtharmor = false;
+    Partimelimit = false;
+    bullethell = false;
   }
 
   G_SetFastParms(fastmonsters);
@@ -501,6 +511,8 @@ void G_SetUserCustomSkill(void)
   customskill2.regentype        = custom_skill_regeneration;
   customskill2.repairtype       = custom_skill_armorrepair;
   customskill2.NoHealthArmor    = custom_skill_NoHealthArmor;
+  customskill2.partimelimit     = custom_skill_partimelimit;
+  customskill2.bullethell       = custom_skill_bullethell;
 }
 
 static void G_UpdateInitialLoadout(void)
@@ -3247,6 +3259,9 @@ static void DoSaveGame(char *name)
   saveg_write32(customskill2.regentype);
   saveg_write32(customskill2.repairtype);
   saveg_write32(customskill2.NoHealthArmor);
+  saveg_write32(customskill2.partimelimit);
+  saveg_write32(customskill2.bullethell);
+
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -3558,6 +3573,8 @@ static boolean DoLoadGame(boolean do_load_autosave)
         READ(customskill2.regentype);
         READ(customskill2.repairtype);
         READ(customskill2.NoHealthArmor);
+        READ(customskill2.partimelimit);
+        READ(customskill2.bullethell);
     }
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
@@ -3809,6 +3826,8 @@ static void G_SaveKeyFrame(void)
   saveg_write32(customskill2.regentype);
   saveg_write32(customskill2.repairtype);
   saveg_write32(customskill2.NoHealthArmor);
+  saveg_write32(customskill2.partimelimit);
+  saveg_write32(customskill2.bullethell);
 
   CheckSaveGame(sizeof(initial_loadout));
 
@@ -4076,6 +4095,8 @@ static void G_DoRewind(void)
     customskill2.regentype = saveg_read32();
     customskill2.repairtype = saveg_read32();
     customskill2.NoHealthArmor = saveg_read32();
+    customskill2.partimelimit = saveg_read32();
+    customskill2.bullethell = saveg_read32();
 
     if (gameskill == sk_custom) { G_SetSkillParms(sk_custom); }
 
@@ -6401,38 +6422,48 @@ void G_BindGameVariables(void)
             "Custom Skill: duplicate monster spawns");
 
   M_BindNum("custom_skill_tysontype", &custom_skill_tysontype, NULL,
-             0, 0, 2, ss_skill, wad_yes, 
+             0, 0, 2, ss_powerups, wad_yes, 
             "Custom Skill: Tyson type (0 = Off; 1 = Classic; 2 = Arcade)");
   M_BindNum("custom_skill_shadowtype", &custom_skill_shadowtype, NULL, 0, 0, 3,
-            ss_skill, wad_yes,
+            ss_powerups, wad_yes,
             "Custom Skill: Shadow type (0 = Off; 1 = Player only; 2 = Monsters only; 3 = Both)");
 
   M_BindBool("custom_skill_nosaves", &custom_skill_nosaves, NULL, 0,
-             ss_skill, wad_yes, "Custom Skill: No Saves!");
+             ss_gamerule, wad_yes, "Custom Skill: No Saves!");
 
   M_BindBool("custom_skill_nocheats", &custom_skill_nocheats, NULL, 0,
-              ss_skill, wad_yes, "Custom Skill: No Cheats!");
+              ss_gamerule, wad_yes, "Custom Skill: No Cheats!");
 
   M_BindNum("custom_skill_duplicatecount", &custom_skill_duplicatecount, NULL, 0, 0,
-              3, ss_skill, wad_yes,
+              3, ss_behavior, wad_yes,
               "Custom Skill: Shadow type (0 = x1; 1 = x2; 2 = "
               "x4; 3 = x8)");
 
-  M_BindBool("custom_skill_quadguy", &custom_skill_quadguy, NULL, 0, ss_skill,
+  M_BindBool("custom_skill_quadguy", &custom_skill_quadguy, NULL, 0, ss_powerups,
              wad_yes, "Custom Skill: Infinite Quad Damage");
 
-  M_BindBool("custom_skill_haste", &custom_skill_haste, NULL, 0, ss_skill,
+  M_BindBool("custom_skill_haste", &custom_skill_haste, NULL, 0, ss_powerups,
              wad_yes, "Custom Skill: Infinite Haste");
 
-  M_BindBool("custom_skill_vampirism", &custom_skill_vampirism, NULL, 0, ss_skill,
+  M_BindBool("custom_skill_vampirism", &custom_skill_vampirism, NULL, 0, ss_powerups,
              wad_yes, "Custom Skill: Infinite Vampirism");
 
   M_BindBool("custom_skill_NoHealthArmor", &custom_skill_NoHealthArmor, NULL, 0,
-             ss_skill, wad_yes, "Custom Skill: No Heal and Armor pickups");
+             ss_gamerule, wad_yes, "Custom Skill: No Heal and Armor pickups");
 
   M_BindNum("custom_skill_regentype", &custom_skill_regeneration, NULL, 0, 0, 2,
-            ss_skill, wad_yes,
+            ss_powerups, wad_yes,
             "Custom Skill: Regeneration Type (0 = Off, 1 = Full, 2 = Partial");
+
+  M_BindNum("custom_skill_repairtype", &custom_skill_armorrepair, NULL, 0, 0, 2,
+            ss_powerups, wad_yes,
+            "Custom Skill: Armor Regeneration Type (0 = Off, 1 = Common, 2 = Upgraded");
+
+  M_BindBool("custom_skill_partimelimit", &custom_skill_partimelimit, NULL, 0,
+             ss_gamerule, wad_yes, "Custom Skill: ParTime limit.");
+
+  M_BindBool("custom_skill_bullethell", &custom_skill_bullethell, NULL, 0,
+             ss_behavior, wad_yes, "Custom Skill: Bullet Hell.");
 
   // [Nugget] ---------------------------------------------------------------/
 

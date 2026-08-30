@@ -118,6 +118,11 @@ void MN_DrawCustomSkill(void);
 
 void MN_UpdateNughudItem(void);
 
+// [Calamity]
+void MN_DrawPowerups(void);
+void MN_DrawGamerule(void);
+void MN_DrawBehavior(void);
+
 // [Nugget] -----------------------------------------------------------------/
 
 /////////////////////////////

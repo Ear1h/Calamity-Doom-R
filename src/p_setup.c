@@ -28,6 +28,7 @@
 #include "doomstat.h"
 #include "g_game.h"
 #include "g_compatibility.h"
+#include "g_umapinfo.h"
 #include "i_printf.h"
 #include "i_system.h"
 #include "info.h"
@@ -543,10 +544,7 @@ void P_LoadThings (int lump)
         const mobjtype_t mobjtype = P_FindDoomedNum(mt->type);
         if (mobjtype < num_mobj_types
             && ((mobjinfo[mobjtype].flags & MF_COUNTKILL) || mobjtype == MT_SKULL))
-        {
-              array_push(enemies, i);  // x2
-              numenemies++;
-              
+        {     
               for (int j = 0; j < ((1 << duplicatecount) - 1); j++)
               {
                   array_push(enemies, i);
@@ -1734,6 +1732,35 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
   totalkills = totalitems = totalsecret = wminfo.maxfrags = 0;
   max_kill_requirement = 0;
   wminfo.partime = 180;
+
+      if (gamemode == commercial)
+      {
+          if (gamemap >= 1 && gamemap <= 34)
+          {
+              wminfo.partime = TICRATE * cpars[gamemap - 1];
+          }
+      }
+      else
+      {
+          // Doom Episode 4 doesn't have a par time, so this overflows into the
+          // cpars[] array.
+          if (demo_compatibility && gameepisode == 4 && gamemap >= 1
+              && gamemap <= 9)
+          {
+              wminfo.partime = TICRATE * cpars[gamemap];
+          }
+          else if (gameepisode >= 1 && gameepisode <= 3 && gamemap >= 1
+                   && gamemap <= 9)
+          {
+              wminfo.partime = TICRATE * pars[gameepisode][gamemap];
+          }
+      }
+
+      if (gamemapinfo)
+      {
+          wminfo.partime = gamemapinfo->partime * TICRATE;
+      }
+
   for (i=0; i<MAXPLAYERS; i++)
   {
     players[i].killcount = players[i].secretcount = players[i].itemcount = 0;

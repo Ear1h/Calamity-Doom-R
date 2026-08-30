@@ -1094,12 +1094,28 @@ void P_PlayerThink (player_t* player)
        }
    }
 
+   if (gameskill == sk_custom && repairtype)
+   {
+       if (!(leveltime & 0x3f) && player->armorpoints < max_armor) // Every 63 tics and don't have MAXARMOR
+       {
+           player->armorpoints += 2;
+           if (player->armorpoints >= blue_armor_class * 100 && repairtype == 2)
+           {
+               player->armortype = blue_armor_class;
+           }
+           if (player->armorpoints > max_armor)
+           {
+               player->armorpoints = max_armor;
+           }
+       }
+   }
+
   // killough 1/98: Make idbeholdx toggle:
 
   if (player->powers[pw_invulnerability] > 0) // killough
     player->powers[pw_invulnerability]--;
 
-  if (player->powers[pw_invisibility] > 0 && gameskill != sk_custom)    // killough
+  if (player->powers[pw_invisibility] > 0)    // killough
     if (! --player->powers[pw_invisibility] )
       player->mo->flags &= ~MF_SHADOW;
 
@@ -1139,6 +1155,16 @@ void P_PlayerThink (player_t* player)
                 (player->psprites[ps_flash].tics + 1) >> 1;         
         }
   }
+
+  // [Calamity]
+  //
+
+  if (Partimelimit)
+  {
+      if (leveltime >= wminfo.partime)
+         P_DamageMobj(player->mo, NULL, NULL, 10000);
+  }
+
 
   // [Nugget] Linetarget Query cheat
   if (player->cheats & CF_LINETARGET)

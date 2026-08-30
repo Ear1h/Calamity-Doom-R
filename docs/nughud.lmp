@@ -218,6 +218,14 @@ nughud_powers_align -1
 nughud_powers_stack 2
 nughud_powers_order 0
 
+; Par Time display
+nughud_powers_x     -1
+nughud_powers_y     -1
+nughud_powers_wide  -1
+nughud_powers_align -1
+nughud_powers_stack 3
+nughud_powers_order 2
+
 ; Coordinates display
 nughud_coord_x     -1
 nughud_coord_y     -1

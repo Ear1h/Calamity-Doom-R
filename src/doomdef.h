@@ -249,6 +249,9 @@ typedef enum {
   ss_mapkeys,
   ss_cheatkeys,
   ss_skill, // Custom Skill menu
+  ss_powerups,
+  ss_gamerule,
+  ss_behavior,
 
   ss_max
 } ss_types;

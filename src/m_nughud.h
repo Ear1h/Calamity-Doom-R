@@ -112,6 +112,7 @@ typedef struct nughud_s {
   nughud_textline_t  message;
   boolean            message_defx;
   nughud_textline_t  secret;
+  nughud_textline_t  partime;
 
   nughud_vlignable_t stacks[NUMNUGHUDSTACKS];
 

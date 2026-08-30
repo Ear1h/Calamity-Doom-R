@@ -235,6 +235,8 @@ extern  boolean         vampire;
 extern  int             regentype;
 extern  int             repairtype;
 extern  boolean         nohealtharmor;
+extern  boolean         Partimelimit;
+extern  boolean         bullethell;
 
 // [Nugget] -----------------------------------------------------------------/
 

@@ -2535,6 +2535,33 @@ static menu_t CustomSkillDef = { // Custom Skill menu
     0
 };
 
+static menu_t Powerdef = {
+    generic_setup_end,
+    &NewDef,
+    Generic_Setup,
+    MN_DrawPowerups,
+    34, 5,
+    0
+};
+
+static menu_t Gamedef = {
+    generic_setup_end,
+    &NewDef,
+    Generic_Setup,
+    MN_DrawGamerule,
+    34, 5,
+    0
+};
+
+static menu_t Behaviordef = {
+    generic_setup_end,
+    &NewDef,
+    Generic_Setup,
+    MN_DrawBehavior,
+    34, 5,
+    0
+};
+
 // [Nugget] -----------------------------------------------------------------/
 
 void MN_SetNextMenuAlt(ss_types type)
@@ -2551,7 +2578,10 @@ void MN_SetNextMenuAlt(ss_types type)
         &HUDColDef,
         &MapKeysDef,
         &CheatKeysDef,
-        &CustomSkillDef // Custom Skill menu
+        &CustomSkillDef, // Custom Skill menu
+        &Powerdef,
+        &Gamedef,
+        &Behaviordef
     };
 
     SetNextMenu(setup_defs[type]);

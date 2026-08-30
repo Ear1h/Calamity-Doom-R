@@ -1423,6 +1423,21 @@ void A_PosAttack(mobj_t *actor)
   S_StartSound(actor, sfx_pistol);
 
   // killough 5/5/98: remove dependence on order of evaluation:
+
+  if (bullethell && gameskill == sk_custom)
+  {
+      mobj_t *mo = P_SpawnMissile(actor, actor->target, MT_TROOPSHOT);
+      if (!mo)
+          return;
+
+      t = P_Random(pr_posattack);
+      mo->angle += (t - P_Random(pr_posattack)) << 20;
+      angle = mo->angle >> ANGLETOFINESHIFT;
+      mo->momx = FixedMul(mo->info->speed, finecosine[angle]);
+      mo->momy = FixedMul(mo->info->speed, finesine[angle]);
+      return;
+  }
+
   t = P_Random(pr_posattack);
   angle += (t - P_Random(pr_posattack))<<20;
   damage = (P_Random(pr_posattack)%5 + 1)*3;
@@ -1439,6 +1454,23 @@ void A_SPosAttack(mobj_t* actor)
   A_FaceTarget(actor);
   bangle = actor->angle;
   slope = P_AimLineAttack(actor, bangle, MISSILERANGE, 0); // killough 8/2/98
+
+  if (bullethell && gameskill == sk_custom)
+  {
+      for (i = 0; i < 3; i++)
+      {
+          mobj_t* mo = P_SpawnMissile(actor, actor->target, MT_TROOPSHOT);
+          if (!mo)
+            return;
+          int t = P_Random(pr_sposattack);
+          mo->angle += ((t - P_Random(pr_sposattack)) << 20);
+          int angle = mo->angle >> ANGLETOFINESHIFT;
+          mo->momx = FixedMul(mo->info->speed, finecosine[angle]);
+          mo->momy = FixedMul(mo->info->speed, finesine[angle]);
+      }
+      return;
+  }
+
   for (i=0; i<3; i++)
     {  // killough 5/5/98: remove dependence on order of evaluation:
       int t = P_Random(pr_sposattack);
@@ -1475,6 +1507,22 @@ void A_CPosAttack(mobj_t *actor)
   A_FaceTarget(actor);
   bangle = actor->angle;
   slope = P_AimLineAttack(actor, bangle, MISSILERANGE, 0); // killough 8/2/98
+
+  if (bullethell && gameskill == sk_custom)
+  {
+      mobj_t *mo = P_SpawnMissile(actor, actor->target, MT_TROOPSHOT);
+      if (!mo)
+      {
+          return;
+      }
+
+      t = P_Random(pr_cposattack);
+      mo->angle += (t - P_Random(pr_cposattack)) << 20;
+      angle = mo->angle >> ANGLETOFINESHIFT;
+      mo->momx = FixedMul(mo->info->speed, finecosine[angle]);
+      mo->momy = FixedMul(mo->info->speed, finesine[angle]);
+      return;
+  }
 
   // killough 5/5/98: remove dependence on order of evaluation:
   t = P_Random(pr_cposattack);
@@ -3183,6 +3231,27 @@ void A_MonsterBulletAttack(mobj_t *actor)
   S_StartSound(actor, actor->info->attacksound);
 
   aimslope = P_AimLineAttack(actor, actor->angle, MISSILERANGE, 0);
+
+  if (bullethell && gameskill == sk_custom)
+  {
+      for (i = 0; i < numbullets; i++)
+      {
+          mobj_t *mo = P_SpawnMissile(actor, actor->target, MT_TROOPSHOT);
+          if (!mo)
+          {
+              return;
+          }
+          mo->angle += P_RandomHitscanAngle(pr_mbf21, hspread);
+          int angle = mo->angle >> ANGLETOFINESHIFT;
+          mo->momx = FixedMul(mo->info->speed, finecosine[angle]);
+          mo->momy = FixedMul(mo->info->speed, finesine[angle]);
+          slope = P_RandomHitscanSlope(pr_mbf21, vspread);
+           // adjust pitch (approximated, using Doom's ye olde
+          // finetangent table; same method as monster aim)
+          mo->momz += FixedMul(mo->info->speed, DegToSlope(slope));
+      }
+      return;
+  }
 
   for (i = 0; i < numbullets; i++)
   {

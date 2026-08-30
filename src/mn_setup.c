@@ -393,6 +393,7 @@ enum
     str_shadowtype,
     str_duplicatecount,
     str_regentype,
+    str_repairtype,
 };
 
 static const char **GetStrings(int id);
@@ -2345,6 +2346,7 @@ static setup_menu_t stat_settings5[] =
   {"HUD", S_SKIP|S_TITLE, M_X, M_SPC},
 
     {"Show Powerup Timers",              S_CHOICE|S_COSMETIC, M_X, M_SPC, {"hud_power_timers"}, .strings_id = str_show_widgets},
+    {"Show Par Time",                    S_CHOICE|S_COSMETIC, M_X, M_SPC, {"hud_partime"}, .strings_id = str_show_widgets},
     {"Blink Missing Keys",               S_ONOFF,             M_X, M_SPC, {"hud_blink_keys"}},
     {"Berserk display when using Fist",  S_ONOFF,             M_X, M_SPC, {"sts_show_berserk"}},
     {"Allow HUD Icons",                  S_ONOFF,             M_X, M_SPC, {"hud_allow_icons"}},
@@ -2367,6 +2369,7 @@ static setup_menu_t hudcol_settings1[] =
     {"Total Level Time",          S_CRITEM, N_X, M_SPC, {"hudcolor_total_time"},  .strings_id = str_hudcolor},
     {"Level Time",                S_CRITEM, N_X, M_SPC, {"hudcolor_time"},        .strings_id = str_hudcolor},
     {"Event Timer",               S_CRITEM, N_X, M_SPC, {"hudcolor_event_timer"}, .strings_id = str_hudcolor},
+    {"Par Time",                  S_CRITEM, N_X, M_SPC, {"hudcolor_partime"},     .strings_id = str_hudcolor},
     MI_GAP,
     {"Kills Label",               S_CRITEM, N_X, M_SPC, {"hudcolor_kills"},     .strings_id = str_hudcolor},
     {"Items Label",               S_CRITEM, N_X, M_SPC, {"hudcolor_items"},     .strings_id = str_hudcolor},
@@ -4394,6 +4397,10 @@ void MN_DrawGeneral(void)
 
 // [Nugget] Custom Skill menu /===============================================
 
+static void MN_Powerups(void);
+static void MN_Gamerules(void);
+static void MN_Behavior(void);
+
 static const char *thing_spawns_strings[] = {
   "Easy", "Normal", "Hard"
 };
@@ -4412,6 +4419,10 @@ static const char *duplicate_count[] = {
 
 static const char *regen_type[] = {
     "Off", "Full", "Partial"
+};
+
+static const char *repair_type[] = {
+    "Off", "Common", "Armor Upgrade"
 };
 
 
@@ -4503,18 +4514,9 @@ static setup_menu_t customskill_settings1[] = {
 };
 
 static setup_menu_t customskill_settings2[] = {
-    {"Tyson Type",                       S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_tysontype"}, .strings_id = str_tysontype},
-    {"Infinite Invisibility",            S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_shadowtype"}, .strings_id = str_shadowtype},
-    {"Infinite Quad Damage",             S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_quadguy"}},
-    {"Infinite Haste",                   S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_haste"}},
-    {"Infinite Vampirism",               S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_vampirism"}},
-    {"Infinite Regeneration",            S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_regentype"}, .strings_id = str_regentype},
-    MI_GAP_Y(4),
-    {"No Saves",                         S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_nosaves"}},
-    {"No Cheats",                        S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_nocheats"}},
-    {"No Health and Armor pickups",      S_ONOFF | S_LEVWARN, M_X, M_SPC, {"custom_skill_NoHealthArmor"}},        
-    MI_GAP_Y(4),
-    {"Duplicate Monsters Extended",      S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_duplicatecount"}, .strings_id = str_duplicatecount},
+    {"Infinite Powerup Options",         S_FUNC, M_X, M_SPC, .action = MN_Powerups},    
+    {"Gamerules Options",                S_FUNC, M_X, M_SPC, .action = MN_Gamerules},    
+    {"Monsters Behavior Options",        S_FUNC, M_X, M_SPC, .action = MN_Behavior},    
     MI_GAP,
     {"Start New Game",                   S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSNewGame},
     {"Restart Level -- Pistol Start",    S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSPistolStart},
@@ -4576,6 +4578,147 @@ void MN_DrawCustomSkill(void)
     }
 }
 
+// [Calamity] ===============================================================/
+// Additional setup screens for powerups/game/behaviors
+
+static setup_menu_t power_settings1[] = {
+    {"Tyson Type",                       S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_tysontype"}, .strings_id = str_tysontype},
+    {"Infinite Invisibility",            S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_shadowtype"}, .strings_id = str_shadowtype},
+    {"Infinite Quad Damage",             S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_quadguy"}},
+    {"Infinite Haste",                   S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_haste"}},
+    {"Infinite Vampirism",               S_ONOFF |S_LEVWARN, M_X, M_SPC, {"custom_skill_vampirism"}},
+    {"Infinite Regeneration",            S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_regentype"}, .strings_id = str_regentype},
+    {"Infinite Armor Repair",            S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_repairtype"}, .strings_id = str_repairtype},
+    MI_GAP,
+    {"Start New Game",                   S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSNewGame},
+    {"Restart Level -- Pistol Start",    S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSPistolStart},
+    {"Restart Level -- Initial Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSInitialLoadout},
+    {"Restart Level -- Current Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSCurrentLoadout},
+    MI_RESET,
+    MI_END
+};
+
+static setup_menu_t *powerupmode_settings[] = {power_settings1, NULL};
+
+static setup_tab_t power_tabs[] = {{"Infinite Powerups Mode"}, {NULL}};
+
+
+static void MN_Powerups(void)
+{
+    SetItemOn(set_item_on);
+    SetPageIndex(current_page);
+
+    MN_SetNextMenuAlt(ss_powerups);
+    setup_screen = ss_powerups;
+    current_page = GetPageIndex(powerupmode_settings);
+    current_menu = powerupmode_settings[current_page];
+    current_tabs = power_tabs;
+    SetupMenuSecondary();
+}
+
+void MN_DrawPowerups(void)
+{
+    DrawBackground("FLOOR4_6");
+    MN_DrawTitle(M_X_CENTER, M_Y_TITLE, "M_GENERL", "General");
+    DrawTabs();
+    DrawInstructions();
+    DrawScreenItems(current_menu);
+
+    if (default_verify)
+    {
+        DrawDefVerify();
+    }
+}
+
+static setup_menu_t gamerule_settings1[] = {
+    {"No Saves",                         S_ONOFF | S_LEVWARN,  M_X, M_SPC, {"custom_skill_nosaves"} },
+    {"No Cheats",                        S_ONOFF | S_LEVWARN,  M_X, M_SPC, {"custom_skill_nocheats"}},
+    {"No Health and Armor pickups",      S_ONOFF | S_LEVWARN,  M_X, M_SPC, {"custom_skill_NoHealthArmor"}},
+    {"Par Time limit",                   S_ONOFF | S_LEVWARN,  M_X, M_SPC, {"custom_skill_partimelimit"}},
+    MI_GAP,
+    {"Start New Game",                   S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSNewGame},
+    {"Restart Level -- Pistol Start",    S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSPistolStart},
+    {"Restart Level -- Initial Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSInitialLoadout},
+    {"Restart Level -- Current Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSCurrentLoadout},
+    MI_RESET,
+    MI_END
+};
+
+static setup_menu_t *gamemode_settings[] = {gamerule_settings1, NULL};
+
+static setup_tab_t Gamerule_tabs[] = {{"Gamerule Mode"}, {NULL}};
+
+static void MN_Gamerules(void)
+{
+    SetItemOn(set_item_on);
+    SetPageIndex(current_page);
+
+    MN_SetNextMenuAlt(ss_gamerule);
+    setup_screen = ss_gamerule;
+    current_page = GetPageIndex(gamemode_settings);
+    current_menu = gamemode_settings[current_page];
+    current_tabs = Gamerule_tabs;
+    SetupMenuSecondary();
+}
+
+void MN_DrawGamerule(void)
+{
+    DrawBackground("FLOOR4_6");
+    MN_DrawTitle(M_X_CENTER, M_Y_TITLE, "M_GENERL", "General");
+    DrawTabs();
+    DrawInstructions();
+    DrawScreenItems(current_menu);
+
+    if (default_verify)
+    {
+        DrawDefVerify();
+    }
+}
+
+
+static setup_menu_t behavior_settings1[] = {
+    {"Duplicate Monsters Extended",      S_CHOICE|S_LEVWARN, M_X, M_SPC, {"custom_skill_duplicatecount"}, .strings_id = str_duplicatecount},
+    {"Bullet Hell",                      S_ONOFF | S_LEVWARN,  M_X, M_SPC, {"custom_skill_bullethell"}},
+    MI_GAP,
+    {"Start New Game",                   S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSNewGame},
+    {"Restart Level -- Pistol Start",    S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSPistolStart},
+    {"Restart Level -- Initial Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSInitialLoadout},
+    {"Restart Level -- Current Loadout", S_FUNC2|S_LEFTJUST, 32, M_SPC, .action = CSCurrentLoadout},
+    MI_RESET,
+    MI_END
+};
+
+static setup_menu_t *monstersbehavior_settings[] = {behavior_settings1, NULL};
+
+static setup_tab_t Behavior_tabs[] = {{"Monster Behavior Mode"}, {NULL}};
+
+static void MN_Behavior(void)
+{
+    SetItemOn(set_item_on);
+    SetPageIndex(current_page);
+
+    MN_SetNextMenuAlt(ss_behavior);
+    setup_screen = ss_behavior;
+    current_page = GetPageIndex(monstersbehavior_settings);
+    current_menu = monstersbehavior_settings[current_page];
+    current_tabs = Behavior_tabs;
+    SetupMenuSecondary();
+}
+
+void MN_DrawBehavior(void)
+{
+    DrawBackground("FLOOR4_6");
+    MN_DrawTitle(M_X_CENTER, M_Y_TITLE, "M_GENERL", "General");
+    DrawTabs();
+    DrawInstructions();
+    DrawScreenItems(current_menu);
+
+    if (default_verify)
+    {
+        DrawDefVerify();
+    }
+}
+
 // [Nugget] =================================================================/
 
 /////////////////////////////
@@ -4624,6 +4767,9 @@ static setup_menu_t **setup_screens[] = {
     mapkeys_settings,
     cheatkeys_settings,
     customskill_settings, // Custom Skill menu
+    powerupmode_settings,
+    gamemode_settings,
+    monstersbehavior_settings,
 };
 
 // [FG] save the index of the current screen in the first page's S_END element's
@@ -4760,6 +4906,14 @@ static void ResetDefaultsSecondary(void)
         ResetDefaults(ss_hudcol);
         ResetDefaults(ss_mapkeys);
         ResetDefaults(ss_cheatkeys);
+    }
+
+    else if (setup_screen == ss_skill)
+    {
+        ResetDefaults(ss_skill);
+        ResetDefaults(ss_powerups);
+        ResetDefaults(ss_gamerule);
+        ResetDefaults(ss_behavior);
     }
 }
 
@@ -6089,6 +6243,7 @@ static const char **selectstrings[] = {
     shadow_type,
     duplicate_count,
     regen_type,
+    repair_type,
 };
 
 static const char **GetStrings(int id)

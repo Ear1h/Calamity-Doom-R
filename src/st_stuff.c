@@ -566,6 +566,9 @@ static boolean CheckConditions(sbarcondition_t *conditions, player_t *player)
                         case sbw_coord:
                             state = hud_player_coords;
                             break;
+                        case sbw_partime:
+                            state = wminfo.partime;
+                            break;
                         default:
                             break;
                     }
@@ -586,6 +589,9 @@ static boolean CheckConditions(sbarcondition_t *conditions, player_t *player)
                             break;
                         case sbw_coord:
                             state = hud_player_coords;
+                            break;
+                        case sbw_partime:
+                            state = wminfo.partime;
                             break;
                         default:
                             break;
@@ -2455,6 +2461,7 @@ void ST_Init(void)
             case sbw_announce:  ntl = &nughud.secret;   break;
             case sbw_title:     ntl = &nughud.title;    break;
             case sbw_powers:    ntl = &nughud.powers;   break;
+            case sbw_partime:   ntl = &nughud.partime;  break;
 
             default: continue;
         }
@@ -3853,6 +3860,7 @@ end_amnum:
   CREATE_BOOM_WIDGET(nughud.rate,   sbw_rate);
   CREATE_BOOM_WIDGET(nughud.cmd,    sbw_cmd);
   CREATE_BOOM_WIDGET(nughud.speed,  sbw_speed);
+  CREATE_BOOM_WIDGET(nughud.partime,sbw_partime);
 
   #undef CREATE_BOOM_WIDGET
 
