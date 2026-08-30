@@ -1,6 +1,6 @@
-include(NuggetDoomSettings)
+include(CalamityDoomSettings)
 
-set(NUGGETDOOM_SOURCES
+set(CALAMITYDOOM_SOURCES
     am_map.c               am_map.h
     d_deh.c                d_deh.h
     d_demoloop.c           d_demoloop.h
@@ -157,40 +157,40 @@ set(NUGGETDOOM_SOURCES
 
 # Standard target definition
 if(WIN32)
-    add_library(nugget-doom SHARED EXCLUDE_FROM_ALL ${NUGGETDOOM_SOURCES})
-    target_compile_definitions(nugget-doom PRIVATE WIN_LAUNCHER)
+    add_library(calamity-doom SHARED EXCLUDE_FROM_ALL ${CALAMITYDOOM_SOURCES})
+    target_compile_definitions(calamity-doom PRIVATE WIN_LAUNCHER)
 
     # Stamp out and compile resource file on Windows.
     configure_file(resource.rc.in "${CMAKE_CURRENT_BINARY_DIR}/resource.rc")
 
-    add_executable(nugget-doom-com WIN32 ../win32/win_launcher.c
+    add_executable(calamity-doom-com WIN32 ../win32/win_launcher.c
         "${CMAKE_CURRENT_BINARY_DIR}/resource.rc")
-    target_nuggetdoom_settings(nugget-doom-com)
-    target_include_directories(nugget-doom-com PRIVATE ${SDL2_INCLUDE_DIR})
-    target_link_libraries(nugget-doom-com PRIVATE ${SDL2_LIBRARIES} nugget-doom)
+    target_calamitydoom_settings(calamity-doom-com)
+    target_include_directories(calamity-doom-com PRIVATE ${SDL2_INCLUDE_DIR})
+    target_link_libraries(calamity-doom-com PRIVATE ${SDL2_LIBRARIES} calamity-doom)
 
-    add_executable(nugget-doom-exe WIN32 ../win32/win_launcher.c
+    add_executable(calamity-doom-exe WIN32 ../win32/win_launcher.c
         "${CMAKE_CURRENT_BINARY_DIR}/resource.rc")
-    target_nuggetdoom_settings(nugget-doom-exe)
-    target_include_directories(nugget-doom-exe PRIVATE ${SDL2_INCLUDE_DIR})
-    target_link_libraries(nugget-doom-exe PRIVATE ${SDL2_LIBRARIES} nugget-doom)
+    target_calamitydoom_settings(calamity-doom-exe)
+    target_include_directories(calamity-doom-exe PRIVATE ${SDL2_INCLUDE_DIR})
+    target_link_libraries(calamity-doom-exe PRIVATE ${SDL2_LIBRARIES} calamity-doom)
 
     # MSVC tries to supply a default manifest and complains when it finds ours
     # unless we specifically tell it not to.
     if(MSVC)
-        target_link_options(nugget-doom-com PRIVATE "/MANIFEST:NO" "/SUBSYSTEM:CONSOLE")
-        target_link_options(nugget-doom-exe PRIVATE "/MANIFEST:NO")
+        target_link_options(calamity-doom-com PRIVATE "/MANIFEST:NO" "/SUBSYSTEM:CONSOLE")
+        target_link_options(calamity-doom-exe PRIVATE "/MANIFEST:NO")
     else()
-        target_link_options(nugget-doom-com PRIVATE "-mconsole")
+        target_link_options(calamity-doom-com PRIVATE "-mconsole")
     endif()
 else()
-    add_executable(nugget-doom ${NUGGETDOOM_SOURCES})
+    add_executable(calamity-doom ${CALAMITYDOOM_SOURCES})
 endif()
 
-target_nuggetdoom_settings(nugget-doom)
-target_include_directories(nugget-doom PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../")
+target_calamitydoom_settings(calamity-doom)
+target_include_directories(calamity-doom PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../")
 
-target_link_libraries(nugget-doom PRIVATE
+target_link_libraries(calamity-doom PRIVATE
     ${SDL2_LIBRARIES}
     SDL2_net::SDL2_net
     OpenAL::OpenAL
@@ -207,50 +207,50 @@ target_link_libraries(nugget-doom PRIVATE
 
 # Some platforms require standard libraries to be linked against.
 if(HAVE_LIBM)
-    target_link_libraries(nugget-doom PRIVATE m)
+    target_link_libraries(calamity-doom PRIVATE m)
 endif()
 
 if(HAVE_AL_BUFFER_CALLBACK)
-    target_sources(nugget-doom PRIVATE i_pcsound.c)
+    target_sources(calamity-doom PRIVATE i_pcsound.c)
 endif()
 
 if(WIN32)
-    target_include_directories(nugget-doom PRIVATE "../win32")
-    target_link_libraries(nugget-doom PRIVATE winmm shlwapi)
-    target_sources(nugget-doom PRIVATE ../win32/win_opendir.c ../win32/win_opendir.h)
+    target_include_directories(calamity-doom PRIVATE "../win32")
+    target_link_libraries(calamity-doom PRIVATE winmm shlwapi)
+    target_sources(calamity-doom PRIVATE ../win32/win_opendir.c ../win32/win_opendir.h)
 endif()
 
 if(APPLE)
-    target_link_libraries(nugget-doom PRIVATE
+    target_link_libraries(calamity-doom PRIVATE
         -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit
         -Wl,-framework,CoreServices -Wl,-framework,CoreAudio
         -Wl,-framework,CoreMIDI)
 endif()
 
 if(ALSA_FOUND)
-    target_include_directories(nugget-doom PRIVATE ${ALSA_INCLUDE_DIR})
-    target_link_libraries(nugget-doom PRIVATE ALSA::ALSA)
+    target_include_directories(calamity-doom PRIVATE ${ALSA_INCLUDE_DIR})
+    target_link_libraries(calamity-doom PRIVATE ALSA::ALSA)
 endif()
 
 if(FluidSynth_FOUND)
-    target_sources(nugget-doom PRIVATE i_flmusic.c)
-    target_link_libraries(nugget-doom PRIVATE FluidSynth::libfluidsynth)
+    target_sources(calamity-doom PRIVATE i_flmusic.c)
+    target_link_libraries(calamity-doom PRIVATE FluidSynth::libfluidsynth)
 endif()
 
 if(libxmp_FOUND)
-    target_sources(nugget-doom PRIVATE i_xmp.c)
-    target_link_libraries(nugget-doom PRIVATE libxmp::xmp)
+    target_sources(calamity-doom PRIVATE i_xmp.c)
+    target_link_libraries(calamity-doom PRIVATE libxmp::xmp)
 endif()
 
 # Optional features.
 #
 # Our defines are not namespaced, so we pass them at compile-time instead of
 # using config.h.
-if(NUGGETDOOM_RANGECHECK)
-    target_compile_definitions(nugget-doom PRIVATE RANGECHECK)
+if(CALAMITYDOOM_RANGECHECK)
+    target_compile_definitions(calamity-doom PRIVATE RANGECHECK)
 endif()
-if(NUGGETDOOM_STRICT)
-    target_compile_definitions(nugget-doom PRIVATE MBF_STRICT)
+if(CALAMITYDOOM_STRICT)
+    target_compile_definitions(calamity-doom PRIVATE MBF_STRICT)
 endif()
 
 set(SETUP_SOURCES
@@ -277,57 +277,57 @@ if(WIN32)
     list(APPEND SETUP_SOURCES "${CMAKE_CURRENT_BINARY_DIR}/setup-res.rc")
 endif()
 
-add_executable(nugget-doom-setup WIN32 ${SETUP_SOURCES})
-target_nuggetdoom_settings(nugget-doom-setup)
+add_executable(calamity-doom-setup WIN32 ${SETUP_SOURCES})
+target_calamitydoom_settings(calamity-doom-setup)
 
-target_include_directories(nugget-doom-setup PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../")
-target_link_libraries(nugget-doom-setup PRIVATE
+target_include_directories(calamity-doom-setup PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../")
+target_link_libraries(calamity-doom-setup PRIVATE
     ${SDL2_LIBRARIES}
     SDL2_net::SDL2_net
     textscreen
     setup)
 
 if(MSVC)
-    target_link_options(nugget-doom-setup PRIVATE "/MANIFEST:NO")
+    target_link_options(calamity-doom-setup PRIVATE "/MANIFEST:NO")
 endif()
 
-add_dependencies(nugget-doom nugget-doom-base)
+add_dependencies(calamity-doom calamity-doom-base)
 
 if(MSVC)
-    add_custom_command(TARGET nugget-doom POST_BUILD
+    add_custom_command(TARGET calamity-doom POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        "${BASE_PK3_PATH}" "$<TARGET_FILE_DIR:nugget-doom>")
+        "${BASE_PK3_PATH}" "$<TARGET_FILE_DIR:calamity-doom>")
 endif()
 
 # Install
 #
 # Rename nugget-doom-com and nugget-doom-exe executables.
 if (WIN32)
-    add_custom_command(TARGET nugget-doom-com POST_BUILD
+    add_custom_command(TARGET calamity-doom-com POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        "$<TARGET_FILE_DIR:nugget-doom-com>/$<TARGET_FILE_NAME:nugget-doom-com>"
-        "$<TARGET_FILE_DIR:nugget-doom-com>/nugget-doom.com")
-    add_custom_command(TARGET nugget-doom-exe POST_BUILD
+        "$<TARGET_FILE_DIR:calamity-doom-com>/$<TARGET_FILE_NAME:calamity-doom-com>"
+        "$<TARGET_FILE_DIR:calamity-doom-com>/calamity-doom.com")
+    add_custom_command(TARGET calamity-doom-exe POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        "$<TARGET_FILE_DIR:nugget-doom-exe>/$<TARGET_FILE_NAME:nugget-doom-exe>"
-        "$<TARGET_FILE_DIR:nugget-doom-exe>/nugget-doom.exe")
+        "$<TARGET_FILE_DIR:calamity-doom-exe>/$<TARGET_FILE_NAME:calamity-doom-exe>"
+        "$<TARGET_FILE_DIR:calamity-doom-exe>/calamity-doom.exe")
 endif()
 
 # Files to package in our distribution.
 if(WIN32)
     if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.21 AND NOT VCPKG_TOOLCHAIN)
-        install(TARGETS nugget-doom nugget-doom-setup
+        install(TARGETS calamity-doom calamity-doom-setup
                 RUNTIME_DEPENDENCIES 
                     PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
                     POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
-                    DIRECTORIES $<TARGET_FILE_DIR:nugget-doom> $ENV{PATH}
+                    DIRECTORIES $<TARGET_FILE_DIR:calamity-doom> $ENV{PATH}
                 RUNTIME DESTINATION .)
     else()
-        install(TARGETS nugget-doom nugget-doom-setup RUNTIME DESTINATION .)
+        install(TARGETS calamity-doom calamity-doom-setup RUNTIME DESTINATION .)
     endif()
-    install(FILES "$<TARGET_FILE_DIR:nugget-doom-com>/nugget-doom.com"
-                  "$<TARGET_FILE_DIR:nugget-doom-exe>/nugget-doom.exe"
+    install(FILES "$<TARGET_FILE_DIR:calamity-doom-com>/calamity-doom.com"
+                  "$<TARGET_FILE_DIR:calamity-doom-exe>/calamity-doom.exe"
             DESTINATION .)
 else()
-    install(TARGETS nugget-doom nugget-doom-setup RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    install(TARGETS calamity-doom calamity-doom-setup RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()

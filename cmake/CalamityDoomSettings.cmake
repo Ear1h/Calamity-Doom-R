@@ -142,7 +142,7 @@ if(${FORCE_COLORED_OUTPUT})
     endif()
 endif()
 
-function(target_nuggetdoom_settings)
+function(target_calamitydoom_settings)
     foreach(target ${ARGN})
         target_compile_options(${target} PRIVATE ${COMMON_COMPILE_OPTIONS})
         target_link_options(${target} PRIVATE ${COMMON_LINK_OPTIONS})

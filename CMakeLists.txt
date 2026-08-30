@@ -11,9 +11,9 @@ set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
 
 cmake_minimum_required(VERSION 3.15)
 
-project("Nugget Doom"
-    VERSION 5.1.0
-    DESCRIPTION "Nugget Doom 5.1.0"
+project("Calamity Doom"
+    VERSION 1.0.0
+    DESCRIPTION "Calamity Doom: R. Advance Custom Skill update"
     HOMEPAGE_URL "https://github.com/MrAlaux/Nugget-Doom"
     LANGUAGES C)
 
@@ -36,19 +36,19 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 endif()
 
 # Hardcoded defines added to configure and resource files.
-set(PROJECT_COMPANY "Alaux and contributors")
+set(PROJECT_COMPANY "Ear1h and contributors")
 set(PROJECT_COPYRIGHT "Copyright (C) 1993-2026")
 set(PROJECT_LICENSE "GNU General Public License, version 2")
 set(PROJECT_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
-set(PROJECT_SHORTNAME "nugget-doom")
-set(BASE_PK3 "nugget-doom.pk3")
-set(NUGGETDOOM_ICON "nugget-doom.ico")
+set(PROJECT_SHORTNAME "calamity-doom")
+set(BASE_PK3 "calamity-doom.pk3")
+set(NUGGETDOOM_ICON "calamity-doom.ico")
 set(SETUP_ICON "setup.ico")
 set(PROJECT_VERSION_RC "${PROJECT_VERSION_MAJOR},${PROJECT_VERSION_MINOR},${PROJECT_VERSION_PATCH},0") # ${PROJECT_VERSION_TWEAK}
 
 # Toggle-able defines added at compile-time.
-option(NUGGETDOOM_RANGECHECK "Enable bounds-checking of performance-sensitive functions" ON)
-option(NUGGETDOOM_STRICT "Prefer original MBF code paths over demo compatiblity with PrBoom+" OFF)
+option(CALAMITYDOOM_RANGECHECK "Enable bounds-checking of performance-sensitive functions" ON)
+option(CALAMITYDOOM_STRICT "Prefer original MBF code paths over demo compatiblity with PrBoom+" OFF)
 
 # Compiler environment requirements.
 check_library_exists(m pow "" HAVE_LIBM)
@@ -164,7 +164,7 @@ else()
 endif()
 
 # Generate distribution packages with CPack.
-set(CPACK_PACKAGE_NAME "Nugget-Doom")
+set(CPACK_PACKAGE_NAME "Calamity-Doom")
 if(WIN32)
     set(CPACK_GENERATOR ZIP)
 elseif(LINUX)
@@ -198,7 +198,7 @@ elseif(LINUX)
                 ${LINUXDEPLOY_EXECUTABLE}
                 --appimage-extract-and-run
                 --appdir=${CPACK_TEMPORARY_DIRECTORY}
-                --executable=$<TARGET_FILE:nugget-doom>
+                --executable=$<TARGET_FILE:calamity-doom>
                 --desktop-file=${CPACK_TEMPORARY_DIRECTORY}/${CPACK_PACKAGING_INSTALL_PREFIX}/share/applications/io.github.MrAlaux.Nugget-Doom.desktop
                 --icon-file=${CPACK_TEMPORARY_DIRECTORY}/${CPACK_PACKAGING_INSTALL_PREFIX}/share/icons/hicolor/128x128/apps/nugget-doom.png
                 --output=appimage)

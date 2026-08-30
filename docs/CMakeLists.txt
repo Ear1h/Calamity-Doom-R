@@ -1,4 +1,4 @@
-set(NUGGETDOOM_DOCS
+set(CALAMITYDOOM_DOCS
     boom.txt
     boomdeh.txt
     boomref.txt
@@ -10,7 +10,7 @@ set(NUGGETDOOM_DOCS
     options.txt)
 
 if(WIN32)
-    install(FILES ${NUGGETDOOM_DOCS} DESTINATION docs)
+    install(FILES ${CALAMITYDOOM_DOCS} DESTINATION docs)
 else()
-    install(FILES ${NUGGETDOOM_DOCS} DESTINATION "share/doc/${PROJECT_SHORTNAME}")
+    install(FILES ${CALAMITYDOOM_DOCS} DESTINATION "share/doc/${PROJECT_SHORTNAME}")
 endif()
