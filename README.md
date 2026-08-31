@@ -30,7 +30,7 @@ A complete history of changes and releases can be found on the [Releases](https:
 
 # Compiling
 
-The Calamity Doom source code is available at GitHub: <https://github.com/Ear1h/Calamity-Doom-R>.
+The Calamity Doom R source code is available at GitHub: <https://github.com/Ear1h/Calamity-Doom-R>.
 
 ## Linux, and Windows with MSYS2
 
@@ -74,7 +74,7 @@ CMake will automatically download and build all dependencies for you.
 
 # Contact
 
-The homepage for Calaamity Doom is <https://github.com/Ear1h/Calamity-Doom-R>.
+The homepage for Calamity Doom R is <https://github.com/Ear1h/Calamity-Doom-R>.
 
 Please report any bugs, glitches or crashes that you encounter to the GitHub [Issue Tracker](https://github.com/Ear1h/Calamity-Doom-R/issues).
 
