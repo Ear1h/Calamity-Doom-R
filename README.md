@@ -1,11 +1,11 @@
 ﻿# Calamity Doom: R
 
-//[![Nugget Doom Icon](https://raw.githubusercontent.com/MrAlaux/Nugget-Doom/master/data/nugget-doom.png)](https://github.com/MrAlaux/Nugget-Doom)
+[![Calamity Doom Icon](https://raw.githubusercontent.com/Ear1h/Calamity-Doom-R/master/data/calamity-doom.png)](https://github.com/Ear1h/Calamity-Doom-R)
 
-[![Release](https://img.shields.io/github/release/MrAlaux/Nugget-Doom.svg)](https://github.com/MrAlaux/Nugget-Doom/releases/latest)
-[![Release Date](https://img.shields.io/github/release-date/MrAlaux/Nugget-Doom.svg)](https://github.com/MrAlaux/Nugget-Doom/releases/latest)
-[![Downloads (total)](https://img.shields.io/github/downloads/MrAlaux/Nugget-Doom/total)](https://github.com/MrAlaux/Nugget-Doom/releases)
-[![Downloads (latest)](https://img.shields.io/github/downloads/MrAlaux/Nugget-Doom/latest/total.svg)](https://github.com/MrAlaux/Nugget-Doom/releases/latest)
+[![Release](https://img.shields.io/badge/release-Calamity_Doom_R_1.0.0-green?style=plastic.svg)](https://github.com/Ear1h/Calamity-Doom-R/releases/latest)
+[![Release Date](https://img.shields.io/badge/release_date-september-yellow?style=plastic)](https://github.com/Ear1h/Calamity-Doom-R/releases/latest)
+[![Downloads (total)](https://img.shields.io/badge/download-0-green?style=plastic)](https://github.com/Ear1h/Calamity-Doom-R/releases)
+[![Downloads (latest)](https://img.shields.io/badge/download_%40latest-0-green?style=plastic)](https://github.com/Ear1h/Calamity-Doom-R/releases/latest)
 
 Calamity Doom: R is a fork of [Nugget Doom](https://github.com/MrAlaux/Nugget-Doom) intended to add even more features.
 
@@ -13,8 +13,7 @@ The build corresponding to this documentation is based on [Woof! 15.3.0](https:/
 
 ### DISCLAIMER
 
-Although the new code has been written with the intention of not breaking demo compatibility, it has not been thoroughly tested yet.
-**RECORD DEMOS AT YOUR OWN RISK!**
+> Although the new code has been written with the intention of not breaking demo compatibility, it has not been thoroughly tested yet. **RECORD DEMOS AT YOUR OWN RISK!**
 
 ## Main Features
 
@@ -23,15 +22,15 @@ Calamity Doom: R builds on top of Nugget Doom with numerous enhancements, most b
 # Releases
 
 Source code and Windows binaries (MSVC builds for Windows 7 and newer)
-for the latest release can be found on the [Release](https://github.com/MrAlaux/Nugget-Doom/releases/latest) page.
+for the latest release can be found on the [Release](https://github.com/Ear1h/Calamity-Doom-R/releases/latest) page.
 
-The most recent list of changes can be found in the [Changelog](https://github.com/MrAlaux/Nugget-Doom/blob/master/CHANGELOG.md).
+The most recent list of changes can be found in the [Changelog](https://github.com/Ear1h/Calamity-Doom-R/blob/master/CHANGELOG.md).
 
-A complete history of changes and releases can be found on the [Releases](https://github.com/MrAlaux/Nugget-Doom/releases) page.
+A complete history of changes and releases can be found on the [Releases](https://github.com/Ear1h/Calamity-Doom-R/releases) page.
 
 # Compiling
 
-The Nugget Doom source code is available at GitHub: <https://github.com/MrAlaux/Nugget-Doom>.
+The Calamity Doom source code is available at GitHub: <https://github.com/Ear1h/Calamity-Doom-R>.
 
 ## Linux, and Windows with MSYS2
 
@@ -53,7 +52,7 @@ and if your distribution has "dev" versions of those libraries, those are the on
 Once installed, compilation should be as simple as:
 
 ```
- cd nugget-doom
+ cd calamity-doom
  mkdir build; cd build
  cmake ..
  make
@@ -67,7 +66,7 @@ Visual Studio 2019 and [VSCode](https://code.visualstudio.com/) comes with built
 
 Install vcpkg <https://github.com/Microsoft/vcpkg#quick-start-windows>. Integrate it into CMake or use toolchain file:
 ```
- cd nugget-doom
+ cd calamity-doom
  cmake -B build -DCMAKE_TOOLCHAIN_FILE="[path to vcpkg]/scripts/buildsystems/vcpkg.cmake"
  cmake --build build
 ```
@@ -75,26 +74,9 @@ CMake will automatically download and build all dependencies for you.
 
 # Contact
 
-The homepage for Nugget Doom is <https://github.com/MrAlaux/Nugget-Doom>.
+The homepage for Calaamity Doom is <https://github.com/Ear1h/Calamity-Doom-R>.
 
-Please report any bugs, glitches or crashes that you encounter to the GitHub [Issue Tracker](https://github.com/MrAlaux/Nugget-Doom/issues).
-
-## Acknowledgements
-
-Help was provided by:
-
-- [_atsb_ (a.k.a. _Gibbon_)](https://github.com/atsb)
-- _Ayba_
-- [_Brad Harding_](https://github.com/bradharding)
-- [_ceski_](https://github.com/ceski-1)
-- [_Fabian Greffrath_](https://github.com/fabiangreffrath)
-- _Korp_
-- [_melak47_](https://github.com/melak47)
-- [_Mikolah_](https://github.com/mykola-ambar)
-- [_Roman Fomin_ (a.k.a. _rfomin_)](https://github.com/rfomin)
-- [_Ryan Krafnick_ (a.k.a. _kraflab_)](https://github.com/kraflab)
-
-Thanks to all of you!
+Please report any bugs, glitches or crashes that you encounter to the GitHub [Issue Tracker](https://github.com/Ear1h/Calamity-Doom-R/issues).
 
 # Legalese
 
@@ -124,6 +106,7 @@ Copyright:
  © 2024 pvictress;  
  © 2025 Guilherme Miranda.  
  © 2026 Vladislav "Ear1h" Putintsev
+
 License: [GPL-2.0+](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 
 Files: `src/i_flickstick.*, src/i_gyro.*`  
