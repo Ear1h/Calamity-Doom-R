@@ -48,6 +48,7 @@
 
 // [Nugget]
 #include "st_stuff.h"
+#include "time.h"
 
 pixel_t *I_VideoBuffer;
 pixel32_t *I_VideoBuffer32;
@@ -1699,19 +1700,38 @@ void V_ScreenShot(void)
 {
     boolean success = false;
 
+    time_t curtime = time(NULL);
+    struct tm *curtm = localtime(&curtime);
+
     errno = 0;
 
     if (!M_access(screenshotdir,2))
     {
         static int shot;
-        char lbmname[16] = {0};
+        char lbmname[64] = {0};
         int tries = 10000;
         char *screenshotname = NULL;
 
         do
         {
-            M_snprintf(lbmname, sizeof(lbmname), "%.4s%04d.png",
-                       D_DoomExeName(), shot++); // [FG] PNG
+            if (gamemode == commercial)
+            {
+                M_snprintf(lbmname, sizeof(lbmname),
+                           "MAP%d_%02d-%02d-%02d_%02d-%02d-%02d.png",
+                           gamemap,
+                           curtm->tm_year + 1900, curtm->tm_mon + 1, curtm->tm_mday, 
+                           curtm->tm_hour, curtm->tm_min, curtm->tm_sec); // [FG] PNG
+            }
+
+            else
+            {
+                M_snprintf(lbmname, sizeof(lbmname),
+                           "E%dM%d_%02d-%02d-%02d_%02d-%02d-%02d.png", 
+                           gameepisode, gamemap,
+                           curtm->tm_year + 1900, curtm->tm_mon + 1,
+                           curtm->tm_mday, curtm->tm_hour, curtm->tm_min,
+                           curtm->tm_sec); // [FG] PNG
+            }
             if (screenshotname)
               free(screenshotname);
             screenshotname = M_StringJoin(screenshotdir, DIR_SEPARATOR_S,

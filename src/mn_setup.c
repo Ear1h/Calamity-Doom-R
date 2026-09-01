@@ -3931,6 +3931,9 @@ static setup_menu_t gen_settings6[] = {
     {"Organize save files", S_ONOFF | S_PRGWARN, OFF_CNTR_X, M_SPC,
      {"organize_savefiles"}, .action = D_SetSavegameDirectory},
 
+     {"Organize screenshot files", S_ONOFF | S_PRGWARN, OFF_CNTR_X, M_SPC,
+     {"organize_screenshots"}, .action = D_SetSavegameDirectory},
+
     MI_GAP,
 
     {"Miscellaneous", S_SKIP | S_TITLE, OFF_CNTR_X, M_SPC},
